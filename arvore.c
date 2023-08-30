@@ -13,7 +13,8 @@ arvore *cria_arvore()
 nodo *cria_nodo(int dado)
 {
     nodo *filho;
-    if (!(malloc(sizeof(arvore))))
+
+    if (!(filho = malloc(sizeof(arvore))))
         return 0;
     filho->dado = dado;
     filho->dir = NULL;
@@ -21,64 +22,66 @@ nodo *cria_nodo(int dado)
 
     return filho;
 }
-nodo *busca(arvore *ipe, int dado)
+nodo *busca(nodo *pai, int dado)
 {
     // caso base, testa se ta vazio
-    if (ipe->raiz == NULL)
+    if (pai == NULL)
         return 0;
 
     // se encontrou dado, retorna endereço
-    if (dado == ipe->raiz->dado)
-        return ipe->raiz->dado;
+    if (dado == pai->dado)
+        return pai;
 
     // se dado for menor, busca do lado esquerdo
-    if (dado < ipe->raiz->dado)
-        return busca(ipe->raiz->esq, dado);
+    if (dado < pai->dado)
+        return busca(pai->esq, dado);
 
     // busca do lado direito
-    return busca(ipe->raiz->dir, dado);
+    return busca(pai->dir, dado);
 }
-void imprime(arvore *ipe)
+void imprime(nodo *pai)
 {
-    if (ipe->raiz == NULL)
+    if (pai == NULL)
     {
         printf("Lista vazia\n");
         return;
     }
 
-    imprime(ipe->raiz->esq);
+    imprime(pai->esq);
 
-    printf("%d, ", ipe->raiz->dado);
+    printf("%d, ", pai->dado);
 
-    imprime(ipe->raiz->dir);
+    imprime(pai->dir);
 }
 
-int insere(arvore *ipe, int dado)
+int insere(nodo *pai, int dado)
 {
-    //se null, cria novo nodo e insere dado
-    if(ipe->raiz == NULL)
+    // se null, cria novo nodo e insere dado
+    if (pai == NULL)
     {
         nodo *novo_f;
-        if(!(novo_f = cria_nodo(dado)))
+        if (!(novo_f = cria_nodo(dado)))
             return 0;
-        
-        ipe->raiz->esq = novo_f;
+
+        pai->esq = novo_f;
     }
-    //se dado ja existe, retorna 1.
-    else if(ipe->raiz->dado == dado)
+    // se dado ja existe, retorna 1.
+    else if (pai->dado == dado)
         return 1;
-    //se novo dado for menor que dado ja existente, insere para a esquerda, recursivamente.
-    else if( dado < ipe->raiz->dado)
-        return insere(ipe->raiz->esq, dado);
+    // se novo dado for menor que dado ja existente, insere para a esquerda, recursivamente.
+    else if (dado < pai->dado)
+        return insere(pai->esq, dado);
     // mesma coisa, pra direita
-    return insere(ipe->raiz->dir, dado);
+    return insere(pai->dir, dado);
 }
 
-int remove(arvore *ipe, int dado)
+int remover(nodo *pai, int dado)
 {
-    // if(ipe->raiz == NULL)
-    //     return 0;
-    // else if(ipe->raiz->esq == NULL && ipe->raiz->dir == NULL && ipe->raiz->dado == dado)
-    //     free(ipe->raiz);
-    // else if()
+    if (!pai)
+        return 0;
+    if(pai->dado == dado)
+
+    if(!pai->esq)
+        return remover(pai->dir, dado);
+    return 0;
 }

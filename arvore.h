@@ -16,11 +16,10 @@ arvore *cria_arvore();
 
 nodo *cria_nodo(int dado);
 
-nodo *busca(arvore *ipe, int dado);
+nodo *busca(nodo *ipe, int dado);
 
-int insere(arvore *ipe, int dado);
+int insere(nodo *ipe, int dado);
 
+void imprime(nodo *pai);
 
-int remove();
-
-void imprime(arvore *ipe);
+int remover(nodo *pai, int dado);
