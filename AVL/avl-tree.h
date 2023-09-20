@@ -1,27 +1,34 @@
+typedef struct arvore
+{
+    struct nodo *raiz;
+
+} arvore;
+
 typedef struct nodo
 {
-    int dado;
+    int r;
     struct nodo *esq;
     struct nodo *dir;
 
 } nodo;
 
-typedef struct arvore
-{
-    nodo *      raiz;
 
-} arvore;
-
+/*cria um ponteiro que aponta para a raiz */
 arvore *cria_arvore();
 
-nodo *cria_nodo(int dado);
+/*retorna um endereço de um nodo */
+nodo *cria_nodo(int r);
 
-nodo *busca(nodo *ipe, int dado);
+nodo *busca(nodo *no, int r);
 
-int insere(nodo *ipe, int dado);
+int insere(nodo *no, int r);
 
-void imprime(nodo *pai);
+int remover(nodo *no, int r);
 
-int remover(nodo *pai, int dado);
+nodo *rotacao_esq(nodo *no);
 
-int destruir_arvore();
+int rotacao_dir(nodo *no);
+
+void imprime(nodo *no);
+
+void destruir_arvore(nodo *no);

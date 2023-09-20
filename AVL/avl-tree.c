@@ -4,84 +4,87 @@
 
 arvore *cria_arvore()
 {
-    arvore *ipe;
-    if (!(ipe = malloc(sizeof(arvore))))
+    arvore *avl;
+
+    if (!(avl = malloc(sizeof(arvore))))
         return 0;
-    ipe->raiz = NULL;
-    return ipe;
+    avl->raiz = NULL;
+    return avl;
 }
-nodo *cria_nodo(int dado)
+nodo *cria_nodo(int r)
 {
     nodo *filho;
 
     if (!(filho = malloc(sizeof(arvore))))
         return 0;
-    filho->dado = dado;
+    filho->r = r;
     filho->dir = NULL;
     filho->esq = NULL;
 
     return filho;
 }
-nodo *busca(nodo *pai, int dado)
+nodo *busca(nodo *no, int r)
 {
     // caso base, testa se ta vazio
-    if (pai == NULL)
+    if (!no)
         return 0;
 
-    // se encontrou dado, retorna endereço
-    if (dado == pai->dado)
-        return pai;
+    // se encontrou r, retorna endereço
+    if (r == no->r)
+        return no;
 
-    // se dado for menor, busca do lado esquerdo
-    if (dado < pai->dado)
-        return busca(pai->esq, dado);
+    // se r for menor, busca do lado esquerdo
+    if (r < no->r)
+        return busca(no->esq, r);
 
     // busca do lado direito
-    return busca(pai->dir, dado);
+    return busca(no->dir, r);
 }
-void imprime(nodo *pai)
+
+void imprime(nodo *no)
 {
-    if (pai == NULL)
-    {
-        printf("Lista vazia\n");
+    if (!no)
         return;
-    }
 
-    imprime(pai->esq);
-
-    printf("%d, ", pai->dado);
-
-    imprime(pai->dir);
+    imprime(no->esq);
+    printf("(%d)", no->r);
+    imprime(no->dir);
 }
 
-int insere(nodo *pai, int dado)
+int insere(nodo *no, int r)
 {
-    // se null, cria novo nodo e insere dado
-    if (pai == NULL)
-    {
-        nodo *novo_f;
-        if (!(novo_f = cria_nodo(dado)))
-            return 0;
-
-        pai->esq = novo_f;
-    }
-    // se dado ja existe, retorna 1.
-    else if (pai->dado == dado)
-        return 1;
-    // se novo dado for menor que dado ja existente, insere para a esquerda, recursivamente.
-    else if (dado < pai->dado)
-        return insere(pai->esq, dado);
-    // mesma coisa, pra direita
-    return insere(pai->dir, dado);
-}
-
-int remover(nodo *pai, int dado)
-{
-    if (!pai)
-        return 0;
-    if(pai->dado == dado)
-
-    if(!pai->esq)
-        return remover(pai->dir, dado);
     return 0;
+}
+
+nodo *rotacao_esq(nodo *no)
+{
+    if (!no)
+        return 0;
+    no->dir->dir = no; // neto esquerdo aponta para o pai
+    no->dir = NULL;    // pai aponta para NULL
+    return no->esq;
+}
+
+int rotacao_dir(nodo *no)
+{
+    return 0;
+}
+
+int remover(nodo *no, int r)
+{
+    return 0;
+}
+
+void destruir_arvore(nodo *no)
+{
+    if (!no)
+        return;
+    if (no->dir)
+        destruir_arvore(no->dir);
+    if (no->esq)
+        destruir_arvore(no->esq);
+
+    free(no);
+
+    return;
 }
