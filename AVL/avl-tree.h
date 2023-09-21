@@ -9,9 +9,9 @@ typedef struct nodo
     int r;
     struct nodo *esq;
     struct nodo *dir;
+    int alt; // balanceamento do nodo
 
 } nodo;
-
 
 /*cria um ponteiro que aponta para a raiz */
 arvore *cria_arvore();
@@ -19,16 +19,28 @@ arvore *cria_arvore();
 /*retorna um endereço de um nodo */
 nodo *cria_nodo(int r);
 
-nodo *busca(nodo *no, int r);
+int busca(nodo *no, int r);
+
+void imprime(nodo *no);
+
+nodo *procura_menor(nodo *atual);
 
 int insere(nodo *no, int r);
 
 int remover(nodo *no, int r);
 
-nodo *rotacao_esq(nodo *no);
+int fator_balanceamento(nodo *no);
 
-int rotacao_dir(nodo *no);
+void rotacao_esq(nodo **raiz);
 
-void imprime(nodo *no);
+void rotacao_dir(nodo **raiz);
+
+void rotacao_esq_dir(nodo **raiz);
+
+void rotacao_dir_esq(nodo **raiz);
 
 void destruir_arvore(nodo *no);
+
+int alt_no(nodo *no);
+
+int maior(int a, int b);
