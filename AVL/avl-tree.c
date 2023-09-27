@@ -7,16 +7,17 @@ arvore *cria_arvore()
     arvore *avl;
 
     if (!(avl = malloc(sizeof(arvore))))
-        return 0;
+        return NULL;
     avl->raiz = NULL;
+
     return avl;
 }
 nodo *cria_nodo(int r)
 {
     nodo *filho;
 
-    if (!(filho = malloc(sizeof(arvore))))
-        return 0;
+    if (!(filho = malloc(sizeof(struct nodo))))
+        return NULL;
 
     filho->alt = 0;
     filho->r = r;
@@ -31,26 +32,29 @@ int busca(nodo *no, int r)
     if (!no)
         return 0;
 
-    printf("(%d)", no->r);
     if (r == no->r)
         return 1;
-
-    // se r for menor, busca do lado esquerdo
+    /* se r for menor, busca do lado esquerdo*/
     if (r < no->r)
         return busca(no->esq, r);
-
-    // busca do lado direito
+    /* busca do lado direito*/
     return busca(no->dir, r);
 }
 
 void imprime(nodo *no)
 {
     if (!no)
+    {
+        printf("()");
         return;
+    }
 
+    printf("(");
+    printf("%d,", no->r);
     imprime(no->esq);
-    printf("(%d)", no->r);
+    printf(",");
     imprime(no->dir);
+    printf(")");
 }
 
 nodo *procura_menor(nodo *atual)
@@ -67,124 +71,112 @@ nodo *procura_menor(nodo *atual)
     return no1;
 }
 
-int insere(nodo *no, int r)
+int insere_nodo(nodo **raiz, int r)
 {
-
-    if (!no)
+    if (!*raiz)
     {
-        /*Caso onde encontrou uma folha para a inserção*/
-        no = cria_nodo(r);
+        /* Caso onde encontrou uma folha para a inserção */
+        *raiz = cria_nodo(r);
         return 1;
     }
 
-    /*Calcula se a inserção vai ser a esquerda da arvore*/
-    if (r < no->r)
+    /* Calcula se a inserção vai ser à esquerda da árvore */
+    if (r < (*raiz)->r)
     {
-        /*sea inserção funciou, eu entro no if e testo balanceamento*/
-        if (!insere(no->esq, r))
+        /* Se a inserção funcionou, entra no if e testa o balanceamento */
+        if (!insere_nodo(&(*raiz)->esq, r))
             return 0;
 
-        if (fator_balanceamento(no) >= 2)
+        if (fator_balanceamento(*raiz) >= 2)
         {
-            if (r < no->esq->r)
-                rotacao_dir(&no);
+            if (r < (*raiz)->esq->r)
+                rotacao_dir(raiz);
             else
-                rotacao_dir_esq(&no);
+                rotacao_dir_esq(raiz);
         }
-        no->alt = maior_altura(no->esq, no->dir) + 1; // atualiza a altura do nó
+        (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1; // atualiza a altura do nó
         return 1;
     }
 
-    /*não foi a esquerda, testo se insiro a direita*/
-    else if (r < no->r)
+    /* Não foi à esquerda, testa se insiro à direita */
+    else if (r > (*raiz)->r)
     {
-        if (!insere(no->dir, r))
+        if (!insere_nodo(&(*raiz)->dir, r))
             return 0;
 
-        if (fator_balanceamento(no) >= 2)
+        if (fator_balanceamento(*raiz) >= 2)
         {
-            if (r < no->esq->r)
-                rotacao_dir(&no);
+            if (r > (*raiz)->dir->r)
+                rotacao_esq(raiz);
             else
-                rotacao_esq_dir(&no);
+                rotacao_esq_dir(raiz);
         }
-        no->alt = maior_altura(no->esq, no->dir) + 1; // atualiza a altura do nó
+        (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1; // atualiza a altura do nó
         return 1;
     }
     return 0;
 }
-// calcula o fator de balanceamento de um nó
 
-int remover(nodo *no, int r)
+int remove_nodo(nodo **raiz, int r)
 {
-    if (!no)
+    if (!*raiz)
         return 0;
 
-    int res; // resultado da busca
+    int res; /* resultado da busca*/
 
-    if (r < no->r)
+    if (r < (*raiz)->r)
     {
-        if (res = remover(no->esq, r))
+        if ((res = remove_nodo(&(*raiz)->esq, r)))
         {
-
-            if (fator_balanceamento(no) >= 2)
+            if (fator_balanceamento(*raiz) >= 2)
             {
-                if (alt_no(no->dir->esq) <= alt_no(no->dir->dir))
-                    rotacao_dir(no);
+                if (alt_no((*raiz)->dir->esq) <= alt_no((*raiz)->dir->dir))
+                    rotacao_dir(raiz);
                 else
-                    rotacao_esq_dir(no);
+                    rotacao_esq_dir(raiz);
             }
         }
     }
-    else if (r > no->r)
+    else if (r > (*raiz)->r)
     {
-        if ((res = remover(no->dir, r)))
+        if ((res = remove_nodo(&(*raiz)->dir, r)))
         {
-            if (fator_balanceamento(no) >= 2)
+            if (fator_balanceamento(*raiz) >= 2)
             {
-                if (alt_no(no->esq->dir) <= alt_no(no->esq->esq))
-                    rotacao_dir(no);
+                if (alt_no((*raiz)->esq->dir) <= alt_no((*raiz)->esq->esq))
+                    rotacao_dir(raiz);
                 else
-                    rotacao_esq_dir(no);
+                    rotacao_dir_esq(raiz);
             }
         }
     }
-    /*entra nesse else se for igual*/
     else
     {
         nodo *no_aux;
-        if (!no->esq || !no->dir)
+        if (!(*raiz)->esq || !(*raiz)->dir)
         {
-            nodo *no_aux = no;
-
-            /* se nao tem filho a esquerda,
-            entao o filho a direita vira o pai,
-            e vice versa*/
-            if (!no->esq)
-                no = no->dir;
+            no_aux = *raiz;
+            if (!(*raiz)->esq)
+                *raiz = (*raiz)->dir;
             else
-                no = no->esq;
+                *raiz = (*raiz)->esq;
             free(no_aux);
         }
-        /*Nesse caso o nó tem 2 filhos*/
         else
         {
-            no_aux = procura_menor(no->dir);
-            no->r = no_aux->r;
-
-            remover(no->dir, no_aux->r);
-
-            if (fator_balanceamento(no) >= 2)
+            no_aux = procura_menor((*raiz)->dir);
+            (*raiz)->r = no_aux->r;
+            remove_nodo(&(*raiz)->dir, no_aux->r);
+            if (fator_balanceamento(*raiz) >= 2)
             {
-                if (alt_no(no->esq->dir) <= alt_no(no->esq->esq))
-                    rotacao_dir(no);
+                if (alt_no((*raiz)->esq->dir) <= alt_no((*raiz)->esq->esq))
+                    rotacao_dir(raiz);
                 else
-                    rotacao_dir_esq(no);
+                    rotacao_dir_esq(raiz);
             }
         }
         return 1;
     }
-
     return res;
 }
 
@@ -193,37 +185,35 @@ int fator_balanceamento(nodo *no)
     if (!no)
         return 0;
     // nao precisa do sinal, pois o labs retorna o valor absoluto
-    return labs(alt_no(no->esq) - alt_no(no->dir));
+    return abs(alt_no(no->esq) - alt_no(no->dir));
 }
 void rotacao_esq(nodo **raiz)
 {
     nodo *no_aux;
+    if (!raiz)
+        return;
 
     no_aux = (*raiz)->dir;
     (*raiz)->dir = no_aux->esq;
-
     no_aux->esq = *raiz;
 
-    (*raiz)->alt = maior_altura((*raiz)->esq, (*raiz)->dir) + 1;
-
+    (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1;
+    no_aux->alt = maior(alt_no(no_aux->esq), alt_no(no_aux->dir)) + 1;
     *raiz = no_aux;
 }
 
 void rotacao_dir(nodo **raiz)
 {
+    nodo *no_aux;
     if (!raiz)
         return;
 
-    nodo *no_aux;
-    /*nesse caso o nó */
-
     no_aux = (*raiz)->esq;
+
     (*raiz)->esq = no_aux->dir;
     no_aux->dir = *raiz;
-
-    (*raiz)->alt = maior_altura((*raiz)->esq, (*raiz)->dir) + 1;
-    no_aux->alt = maior_altura(no_aux->esq, no_aux->dir) + 1;
-
+    (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1;
+    no_aux->alt = maior(alt_no(no_aux->esq), alt_no(no_aux->dir)) + 1;
     *raiz = no_aux;
 }
 

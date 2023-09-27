@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "avl-tree.h"
+
 int main()
 {
     arvore *avl;
@@ -15,19 +16,20 @@ int main()
         switch (op)
         {
         case 'i':
-            insere(avl->raiz, r);
+            insere_nodo(&(avl->raiz), r);
             break;
         case 'b':
             busca(avl->raiz, r);
             break;
         case 'r':
-            remover(avl->raiz, r);
+            remove_nodo(&(avl->raiz), r);
             break;
-        case '\n':
-            return 0;
+        // case '\n':
+        //     return 0;
         default:
             break;
         }
+        imprime(avl->raiz);
     } while (op != 'i' || op != 'b' || op != 'r');
 
     destruir_arvore(avl->raiz);

@@ -25,9 +25,9 @@ void imprime(nodo *no);
 
 nodo *procura_menor(nodo *atual);
 
-int insere(nodo *no, int r);
+int insere_nodo(nodo **raiz, int r);
 
-int remover(nodo *no, int r);
+int remove_nodo(nodo **raiz, int r);
 
 int fator_balanceamento(nodo *no);
 
