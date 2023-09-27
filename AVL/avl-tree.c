@@ -28,12 +28,16 @@ nodo *cria_nodo(int r)
 }
 int busca(nodo *no, int r)
 {
-    // caso base, testa se ta vazio
+    /*Arrumar a virgula*/
     if (!no)
         return 0;
 
-    if (r == no->r)
+    printf("%d", no->r);
+    if (r == no->r)        
         return 1;
+
+    
+    /*corrigir isso daqui*/
     /* se r for menor, busca do lado esquerdo*/
     if (r < no->r)
         return busca(no->esq, r);
@@ -51,12 +55,15 @@ void imprime(nodo *no)
 
     printf("(");
     printf("%d,", no->r);
+
     imprime(no->esq);
     printf(",");
+
     imprime(no->dir);
+
     printf(")");
 }
-
+/*Comentar isso aqui*/
 nodo *procura_menor(nodo *atual)
 {
     nodo *no1 = atual;
@@ -86,7 +93,7 @@ int insere_nodo(nodo **raiz, int r)
         /* Se a inserção funcionou, entra no if e testa o balanceamento */
         if (!insere_nodo(&(*raiz)->esq, r))
             return 0;
-
+        /*Comentar isso aqui, levando em conta que esta em modulo*/
         if (fator_balanceamento(*raiz) >= 2)
         {
             if (r < (*raiz)->esq->r)
@@ -94,6 +101,7 @@ int insere_nodo(nodo **raiz, int r)
             else
                 rotacao_dir_esq(raiz);
         }
+        /*maior tamanho da esq, mais o maior tamanho da dir*/
         (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1; // atualiza a altura do nó
         return 1;
     }
@@ -184,7 +192,7 @@ int fator_balanceamento(nodo *no)
 {
     if (!no)
         return 0;
-    // nao precisa do sinal, pois o labs retorna o valor absoluto
+    /* nao precisa do sinal, pois o labs retorna o valor absoluto */
     return abs(alt_no(no->esq) - alt_no(no->dir));
 }
 void rotacao_esq(nodo **raiz)
@@ -231,6 +239,7 @@ void rotacao_dir_esq(nodo **raiz)
 
 void destruir_arvore(nodo *no)
 {
+    /*Vazamento de memoria, CORRIJAAAAAAAAAAAA*/
     if (!no)
         return;
     if (no->dir)

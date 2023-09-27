@@ -9,7 +9,7 @@ typedef struct nodo
     int r;
     struct nodo *esq;
     struct nodo *dir;
-    int alt; // balanceamento do nodo
+    int alt; /* balanceamento do nodo*/
 
 } nodo;
 
