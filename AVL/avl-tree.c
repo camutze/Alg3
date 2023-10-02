@@ -33,10 +33,9 @@ int busca(nodo *no, int r)
         return 0;
 
     printf("%d", no->r);
-    if (r == no->r)        
+    if (r == no->r)
         return 1;
 
-    
     /*corrigir isso daqui*/
     /* se r for menor, busca do lado esquerdo*/
     if (r < no->r)
@@ -78,114 +77,143 @@ nodo *procura_menor(nodo *atual)
     return no1;
 }
 
-int insere_nodo(nodo **raiz, int r)
+nodo *insere_nodo(nodo *raiz, int *r)
 {
-    if (!*raiz)
+    if (!raiz)
     {
         /* Caso onde encontrou uma folha para a inserção */
-        *raiz = cria_nodo(r);
-        return 1;
+        return cria_nodo(&r);
     }
 
-    /* Calcula se a inserção vai ser à esquerda da árvore */
-    if (r < (*raiz)->r)
+    if (r < raiz->r)
     {
-        /* Se a inserção funcionou, entra no if e testa o balanceamento */
-        if (!insere_nodo(&(*raiz)->esq, r))
-            return 0;
-        /*Comentar isso aqui, levando em conta que esta em modulo*/
-        if (fator_balanceamento(*raiz) >= 2)
-        {
-            if (r < (*raiz)->esq->r)
-                rotacao_dir(raiz);
-            else
-                rotacao_dir_esq(raiz);
-        }
-        /*maior tamanho da esq, mais o maior tamanho da dir*/
-        (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1; // atualiza a altura do nó
-        return 1;
-    }
+        /* Insere à esquerda e atualiza a altura */
+        raiz->esq = insere_recursivo(raiz->esq, r);
 
-    /* Não foi à esquerda, testa se insiro à direita */
-    else if (r > (*raiz)->r)
+        /* Verifica e corrige o fator de equilíbrio */
+        int fator = fator_balanceamento(raiz);
+        if (fator >= 2)
+        {
+            if (r < raiz->esq->r)
+                rotacao_dir(&raiz);
+            else
+                rotacao_esq_dir(&raiz);
+        }
+    }
+    else if (r > raiz->r)
     {
-        if (!insere_nodo(&(*raiz)->dir, r))
-            return 0;
+        /* Insere à direita e atualiza a altura */
+        raiz->dir = insere_recursivo(raiz->dir, r);
 
-        if (fator_balanceamento(*raiz) >= 2)
+        /* Verifica e corrige o fator de equilíbrio */
+        int fator = fator_balanceamento(raiz);
+        if (fator >= 2)
         {
-            if (r > (*raiz)->dir->r)
-                rotacao_esq(raiz);
+            if (r > raiz->dir->r)
+                rotacao_esq(&raiz);
             else
-                rotacao_esq_dir(raiz);
+                rotacao_dir_esq(&raiz);
         }
-        (*raiz)->alt = maior(alt_no((*raiz)->esq), alt_no((*raiz)->dir)) + 1; // atualiza a altura do nó
-        return 1;
     }
-    return 0;
+
+    /* Atualiza a altura do nó atual */
+    raiz->alt = maior(alt_no(raiz->esq), alt_no(raiz->dir)) + 1;
+
+    return raiz;
 }
 
-int remove_nodo(nodo **raiz, int r)
+nodo *remove_nodo_recursivo(nodo *raiz, int r)
 {
-    if (!*raiz)
-        return 0;
+    /* Nó não encontrado, nenhum trabalho a fazer. */
+    if (!raiz)
+        return raiz;
 
-    int res; /* resultado da busca*/
+    /* Remova da subárvore esquerda e atualize a altura. */
+    if (r < raiz->r)
+        raiz->esq = remove_nodo_recursivo(raiz->esq, r);
 
-    if (r < (*raiz)->r)
-    {
-        if ((res = remove_nodo(&(*raiz)->esq, r)))
-        {
-            if (fator_balanceamento(*raiz) >= 2)
-            {
-                if (alt_no((*raiz)->dir->esq) <= alt_no((*raiz)->dir->dir))
-                    rotacao_dir(raiz);
-                else
-                    rotacao_esq_dir(raiz);
-            }
-        }
-    }
-    else if (r > (*raiz)->r)
-    {
-        if ((res = remove_nodo(&(*raiz)->dir, r)))
-        {
-            if (fator_balanceamento(*raiz) >= 2)
-            {
-                if (alt_no((*raiz)->esq->dir) <= alt_no((*raiz)->esq->esq))
-                    rotacao_dir(raiz);
-                else
-                    rotacao_dir_esq(raiz);
-            }
-        }
-    }
+    /* Remova da subárvore direita e atualize a altura. */
+    else if (r > raiz->r)
+        raiz->dir = remove_nodo_recursivo(raiz->dir, r);
+
     else
     {
-        nodo *no_aux;
-        if (!(*raiz)->esq || !(*raiz)->dir)
+        /* Nodo com o valor a ser removido encontrado. */
+
+        /* Caso 1: Nodo com zero ou um filho. */
+        if (!raiz->esq || !raiz->dir)
         {
-            no_aux = *raiz;
-            if (!(*raiz)->esq)
-                *raiz = (*raiz)->dir;
+            nodo *temp;
+            if (raiz->esq)
+                temp = raiz->esq; 
             else
-                *raiz = (*raiz)->esq;
-            free(no_aux);
+                temp = raiz->dir; 
+                
+            /* Caso 1a: Nodo com zero filho. */
+            if (!temp)
+            {
+                temp = raiz;
+                raiz = NULL;
+            }
+            else /* Caso 1b: Nodo com um filho. */
+            {
+                *raiz = *temp; /* Copia os conteúdos do filho para o nodo atual. */
+            }
+
+            free(temp);
+        }
+        else /* Caso 2: Nodo com dois filhos. */
+        {
+            /* Encontre o sucessor in-order (o menor valor na subárvore direita). */
+            nodo *temp = procura_menor(raiz->dir);
+
+            /* Copie o valor do sucessor para este nodo. */
+            raiz->r = temp->r;
+
+            /* Remova o sucessor in-order. */
+            raiz->dir = remove_nodo_recursivo(raiz->dir, temp->r);
+        }
+    }
+
+    /* Se a raiz se tornar nula após a remoção, retorne-a. */
+    if (!raiz)
+    {
+        return raiz;
+    }
+
+    /* Atualize a altura do nodo atual. */
+    raiz->alt = maior(alt_no(raiz->esq), alt_no(raiz->dir)) + 1;
+
+    /* Verifique o fator de equilíbrio do nodo. */
+    int fator = fator_balanceamento(raiz);
+
+    /* Se o fator de equilíbrio estiver fora do intervalo [-1, 1], reequilibre a árvore. */
+    if (fator >= 2)
+    {
+        /* Nó desequilibrado na subárvore esquerda. */
+        if (fator_balanceamento(raiz->esq) >= 0)
+        {
+            rotacao_dir(&raiz);
         }
         else
         {
-            no_aux = procura_menor((*raiz)->dir);
-            (*raiz)->r = no_aux->r;
-            remove_nodo(&(*raiz)->dir, no_aux->r);
-            if (fator_balanceamento(*raiz) >= 2)
-            {
-                if (alt_no((*raiz)->esq->dir) <= alt_no((*raiz)->esq->esq))
-                    rotacao_dir(raiz);
-                else
-                    rotacao_dir_esq(raiz);
-            }
+            rotacao_esq_dir(&raiz);
         }
-        return 1;
     }
-    return res;
+    else if (fator <= -2)
+    {
+        /* Nó desequilibrado na subárvore direita. */
+        if (fator_balanceamento(raiz->dir) <= 0)
+        {
+            rotacao_esq(&raiz);
+        }
+        else
+        {
+            rotacao_dir_esq(&raiz);
+        }
+    }
+
+    return raiz;
 }
 
 int fator_balanceamento(nodo *no)

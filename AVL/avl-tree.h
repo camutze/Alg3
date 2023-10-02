@@ -25,7 +25,7 @@ void imprime(nodo *no);
 
 nodo *procura_menor(nodo *atual);
 
-int insere_nodo(nodo **raiz, int r);
+nodo *insere_nodo(nodo *raiz, int *r);
 
 int remove_nodo(nodo **raiz, int r);
 

@@ -11,8 +11,7 @@ int main()
 
     do
     {
-        scanf("%c", &op);
-        scanf("%d", &r);
+        scanf("%c %d", &op, &r);
         
         switch (op)
         {
@@ -30,15 +29,16 @@ int main()
             imprime(avl->raiz);
             printf("\n");
             break;
-        // case '\n':
-        //     return 0;
+         case 's':
+            break;
         default:
+            printf("Operacao invalida\n");
             break;
         }
         
-    } while (op != 'i' || op != 'b' || op != 'r');
+    } while (op != 's');
 
-    destruir_arvore(avl);
+    destruir_arvore(avl->raiz);
     free(avl);
     return 0;
 }
