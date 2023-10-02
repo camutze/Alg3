@@ -16,7 +16,7 @@ int main()
         switch (op)
         {
         case 'i':
-            insere_nodo(&(avl->raiz), r);
+            insere_nodo(avl->raiz, r);
             imprime(avl->raiz);
             printf("\n");
             break;
@@ -25,7 +25,7 @@ int main()
             printf("\n");
             break;
         case 'r':
-            remove_nodo(&(avl->raiz), r);
+            remove_nodo(avl->raiz, r);
             imprime(avl->raiz);
             printf("\n");
             break;
