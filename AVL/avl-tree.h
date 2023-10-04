@@ -47,4 +47,6 @@ short maior(int a, int b);
 
 nodo *retorna_raiz(arvore *avl);
 
+void salva_raiz(arvore *avl, nodo *raiz);
+
 void destruir_arvore(nodo *no);

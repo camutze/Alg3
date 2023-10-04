@@ -37,6 +37,7 @@ int busca(nodo *no, int r)
     printf("%d", no->r);
     if (r == no->r)
         return 1;
+    printf(",");
 
     /*corrigir isso daqui*/
     /* se r for menor, busca do lado esquerdo*/
@@ -132,7 +133,7 @@ nodo *remove_nodo(nodo *raiz, int r)
         raiz->esq = remove_nodo(raiz->esq, r);
     else
         raiz->dir = remove_nodo(raiz->dir, r);
-    
+
     /*recalcula a altura */
     raiz->alt = maior(alt_no(raiz->esq), alt_no(raiz->dir)) + 1;
 
@@ -215,10 +216,7 @@ short fator_balanceamento(nodo *no)
 /*Retorna a altura de um nó ou -1 caso NULL*/
 short alt_no(nodo *no)
 {
-    if (!no)
-        return -1;
-    else
-        return no->alt;
+    return no ? no->alt : -1;
 }
 
 short maior(int a, int b)
@@ -229,6 +227,11 @@ short maior(int a, int b)
 nodo *retorna_raiz(arvore *avl)
 {
     return avl->raiz;
+}
+
+void salva_raiz(arvore *avl, nodo *raiz)
+{
+    avl->raiz = raiz;
 }
 
 void destruir_arvore(nodo *no)
