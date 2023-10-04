@@ -10,10 +10,9 @@ int main()
     char op;
     avl = cria_arvore();
 
-    do
+    while (scanf("%c %d", &op, &r) != EOF)
     {
         raiz_aux = retorna_raiz(avl);
-        scanf("%c %d", &op, &r);
 
         switch (op)
         {
@@ -33,7 +32,7 @@ int main()
             break;
         }
         salva_raiz(avl, raiz_aux);
-    } while (op != 's');
+    }
 
     destruir_arvore(retorna_raiz(avl));
     free(avl);
