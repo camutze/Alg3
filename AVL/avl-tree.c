@@ -88,6 +88,15 @@ nodo *insere_nodo(nodo *raiz, int r)
     return raiz;
 }
 
+void troca_nodo(nodo *raiz, nodo *aux)
+{
+    nodo *troca;
+
+    troca = raiz;
+    raiz = aux;
+    aux = troca;
+}
+
 nodo *remove_nodo(nodo *raiz, int r)
 {
     nodo *aux;
@@ -112,11 +121,9 @@ nodo *remove_nodo(nodo *raiz, int r)
             aux = raiz->esq;
             while (aux->dir)
                 aux = aux->dir;
-            /*ATENÇÃO
-            testar sem trocar os valores, mas sim trocar
-            os ponteiros*/
-            raiz->r = aux->r;
-            aux->r = r;
+           
+            troca_nodo(raiz, aux);
+
             raiz->esq = remove_nodo(raiz->esq, r);
             return raiz;
         }
@@ -141,6 +148,7 @@ nodo *remove_nodo(nodo *raiz, int r)
 
     return raiz;
 }
+
 
 nodo *balancear(nodo *raiz)
 {
