@@ -37,7 +37,8 @@ int busca(nodo *no, int r)
     printf("%d", no->r);
     if (r == no->r)
         return 1;
-    printf(",");
+    if (no->esq || no->dir)
+        printf(",");
 
     /*corrigir isso daqui*/
     /* se r for menor, busca do lado esquerdo*/
@@ -56,7 +57,7 @@ void imprime(nodo *no)
     }
 
     printf("(");
-    printf("%d", no->r);
+    printf("%d, ", no->r);
 
     imprime(no->esq);
     printf(", ");
@@ -121,7 +122,7 @@ nodo *remove_nodo(nodo *raiz, int r)
             aux = raiz->esq;
             while (aux->dir)
                 aux = aux->dir;
-           
+
             troca_nodo(raiz, aux);
 
             raiz->esq = remove_nodo(raiz->esq, r);
@@ -148,7 +149,6 @@ nodo *remove_nodo(nodo *raiz, int r)
 
     return raiz;
 }
-
 
 nodo *balancear(nodo *raiz)
 {

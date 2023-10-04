@@ -13,12 +13,11 @@ int main()
     do
     {
         raiz_aux = retorna_raiz(avl);
-        scanf("%c", &op);
-        scanf("%d", &r);
+        scanf("%c %d", &op, &r);
+
         switch (op)
         {
         case 'i':
-            printf("Inserindo %d\n", r);
             raiz_aux = insere_nodo(raiz_aux, r);
             imprime(raiz_aux);
             printf("\n");
@@ -31,8 +30,6 @@ int main()
             raiz_aux = remove_nodo(avl->raiz, r);
             imprime(raiz_aux);
             printf("\n");
-            break;
-        case 's':
             break;
         }
         salva_raiz(avl, raiz_aux);
