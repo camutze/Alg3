@@ -11,12 +11,13 @@ int main()
 
     do
     {
-        scanf("%c %d", &op, &r);
-        
+        scanf("%c", &op);
+        scanf("%d", &r);
         switch (op)
         {
         case 'i':
-            insere_nodo(avl->raiz, r);
+            printf("Inserindo %d\n", r);
+            avl->raiz = insere_nodo(avl->raiz, r);
             imprime(avl->raiz);
             printf("\n");
             break;
@@ -25,17 +26,14 @@ int main()
             printf("\n");
             break;
         case 'r':
-            remove_nodo(avl->raiz, r);
+            avl->raiz = remove_nodo(avl->raiz, r);
             imprime(avl->raiz);
             printf("\n");
             break;
-         case 's':
-            break;
-        default:
-            printf("Operacao invalida\n");
+        case 's':
             break;
         }
-        
+
     } while (op != 's');
 
     destruir_arvore(avl->raiz);

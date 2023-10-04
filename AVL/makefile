@@ -1,6 +1,6 @@
 # Makefile para compilar avl-tree.h, avl-tree.c e main.c
 
-CFLAGS = -Wall # flags de compilacao
+CFLAGS = -Wall -g # flags de compilacao
 CC = gcc
 
 all: main.o avl-tree.o

@@ -1,3 +1,4 @@
+
 typedef struct arvore
 {
     struct nodo *raiz;
@@ -9,7 +10,7 @@ typedef struct nodo
     int r;
     struct nodo *esq;
     struct nodo *dir;
-    int alt; /* balanceamento do nodo*/
+    short alt; /* balanceamento do nodo*/
 
 } nodo;
 
@@ -23,24 +24,27 @@ int busca(nodo *no, int r);
 
 void imprime(nodo *no);
 
-nodo *procura_menor(nodo *atual);
-
 nodo *insere_nodo(nodo *raiz, int r);
 
 nodo *remove_nodo(nodo *raiz, int r);
 
-int fator_balanceamento(nodo *no);
+/*comentar*/
+nodo *balancear(nodo *raiz);
 
-void rotacao_esq(nodo **raiz);
+nodo *rotacao_dir(nodo *raiz);
 
-void rotacao_dir(nodo **raiz);
+nodo *rotacao_esq(nodo *raiz);
 
-void rotacao_esq_dir(nodo **raiz);
+nodo *rotacao_esq_dir(nodo *raiz);
 
-void rotacao_dir_esq(nodo **raiz);
+nodo *rotacao_dir_esq(nodo *raiz);
+
+short fator_balanceamento(nodo *no);
+
+short alt_no(nodo *no);
+
+short maior(int a, int b);
+
+nodo *retorna_raiz(arvore *avl);
 
 void destruir_arvore(nodo *no);
-
-int alt_no(nodo *no);
-
-int maior(int a, int b);
