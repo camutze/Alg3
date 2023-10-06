@@ -13,22 +13,22 @@ int main()
     while (scanf("%c %d", &op, &r) != EOF)
     {
         raiz_aux = retorna_raiz(avl);
-
+        
         switch (op)
         {
         case 'i':
             raiz_aux = insere_nodo(raiz_aux, r);
+            printf("\ni %d\n", r);
             imprime(raiz_aux);
-            printf("\n");
             break;
         case 'b':
+            printf("\nb %d\n", r);
             busca(raiz_aux, r);
-            printf("\n");
             break;
         case 'r':
             raiz_aux = remove_nodo(avl->raiz, r);
+            printf("\nr %d\n", r);
             imprime(raiz_aux);
-            printf("\n");
             break;
         }
         salva_raiz(avl, raiz_aux);

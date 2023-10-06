@@ -1,5 +1,5 @@
-
-typedef struct arvore
+/* Escolha de estrutura feita para melhor uso, mais intuitivo. */
+typedef struct arvore 
 {
     struct nodo *raiz;
 } arvore;
@@ -9,7 +9,7 @@ typedef struct nodo
     int r;
     struct nodo *esq;
     struct nodo *dir;
-    short alt; /* Balanceamento do nodo. */
+    short alt; /* Altura do nodo. */
 } nodo;
 
 /* Cria um ponteiro que aponta para a raiz e o retorna. */
