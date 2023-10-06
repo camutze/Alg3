@@ -9,7 +9,12 @@ typedef struct nodo
     int r;
     struct nodo *esq;
     struct nodo *dir;
+<<<<<<< HEAD
     short alt; /* Balanceamento do nodo. */
+=======
+    short alt; /* balanceamento do nodo*/
+
+>>>>>>> 8ca52865392ddde4851e4a8e5e88a3a6c72ed22c
 } nodo;
 
 /* Cria um ponteiro que aponta para a raiz e o retorna. */
@@ -24,6 +29,7 @@ int busca(nodo *no, int r);
 /* Imprime a arvore. */
 void imprime(nodo *no);
 
+<<<<<<< HEAD
 /* Cria um novo nodo com o valor passado pelo usuario e o insere no lugar correto da arvore. */
 nodo *insere_nodo(nodo *raiz, int r);
 
@@ -61,4 +67,31 @@ nodo *retorna_raiz(arvore *avl);
 void salva_raiz(arvore *avl, nodo *raiz);
 
 /* Destroi a arvore e da free nos nodos. */
+=======
+nodo *insere_nodo(nodo *raiz, int r);
+
+nodo *remove_nodo(nodo *raiz, int r);
+
+/*comentar*/
+nodo *balancear(nodo *raiz);
+
+nodo *rotacao_dir(nodo *raiz);
+
+nodo *rotacao_esq(nodo *raiz);
+
+nodo *rotacao_esq_dir(nodo *raiz);
+
+nodo *rotacao_dir_esq(nodo *raiz);
+
+short fator_balanceamento(nodo *no);
+
+short alt_no(nodo *no);
+
+short maior(int a, int b);
+
+nodo *retorna_raiz(arvore *avl);
+
+void salva_raiz(arvore *avl, nodo *raiz);
+
+>>>>>>> 8ca52865392ddde4851e4a8e5e88a3a6c72ed22c
 void destruir_arvore(nodo *no);
