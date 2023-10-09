@@ -214,7 +214,7 @@ short alt_no(nodo *no)
 
 short maior(int a, int b)
 {
-    return (a > b) ? a : b;
+    return (a > b) ? a : b; 
 }
 
 nodo *retorna_raiz(arvore *avl)
