@@ -67,3 +67,11 @@ para avl->raiz.
 - func void destruir_arvore(nodo *no): Varre primeiro o lado esquerdo da arvore
 e verifica se o nodo existe. Se existe, verifica se tem filhos. Se nao tiver, da 
 free nesse nodo e segue para o lado direito. 
+
+-Observações
+Para a implentação do codigo usamos o "VScode" nos computadores do DInf. 
+
+Para auxilio, e melhor performace trabalhando.
+em grupo usamos um repositorio usando a ferramenta "GitHub".
+
+Houve grande dificuldade em resolver "liquid" de memória.
