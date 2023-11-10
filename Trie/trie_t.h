@@ -1,6 +1,5 @@
 #include <stdlib.h>
 
-#include "arquivo.h"
 
 #define ALFABETO 52
 #define MIN_PALAVRA 3

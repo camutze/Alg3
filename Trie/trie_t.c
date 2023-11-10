@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "arquivo.h"
+#include "trie_t.h"
 
 trie_t *cria_trie()
 {
