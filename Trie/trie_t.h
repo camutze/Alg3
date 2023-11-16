@@ -5,22 +5,16 @@
 #define MIN_PALAVRA 3
 /*O objetivo é criar uma base de dados para localizar palavras em um conjunto de arquivos.
 Isso será feito usando árvores digitais (tries) para organizar as palavras contidas nos arquivos.
-Cada registro (palavra) indicará a lista de arquivos onde a palavra ocorre.
+Cada registro (palavra) indicará a lista de  arquivos onde a palavra ocorre.
 Esta base de dados será guardada em um arquivo para uso posterior.
 
 */
-typedef struct trie_t
-{
-    struct nodo_t *raiz;
-    int tamanho;
-} trie_t;
 
 typedef struct nodo_t
 {
     struct nodo_t *filho[ALFABETO];
-    char letra;
     int fim;
-    int origem;
+    char origem[10];
 } nodo_t;
 
 /*cria um ponteiro para a arvore */

@@ -2,20 +2,19 @@ CC      = gcc
 CFLAGS  = -Wall -Wextra -g -std=c99 -pedantic
 MAIN    =  main
 ENTREGA = $(MAIN)-entrega
-TESTES  = testa-lef
 
 # programa principal
-$(MAIN):   $(MAIN).o main.o arquivo.o
-$(MAIN).o: $(MAIN).c arquivo.h
+$(MAIN):   $(MAIN).o main.o trie_t.o
+$(MAIN).o: $(MAIN).c trie_t.h
 
 
 # TADs
-arquivo.o: arquivo.c arquivo.h
+trie_t.o: trie_t.c trie_t.h
 
 
 clean:
 	rm -f *.o *~ $(MAIN) $(ENTREGA) $(ENTREGA).tgz
-remake:
+cc:
 	make clean ; reset ; make
 
 entrega: clean
