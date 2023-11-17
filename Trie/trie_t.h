@@ -13,6 +13,8 @@ typedef struct trie_node
     int is_end;
 } trie_node;
 
+void tratar_erro(const char *msg);
+
 trie_node *criar_no(void);
 
 void inserir(trie_node *raiz, const char *chave);
