@@ -1,105 +1,123 @@
-#include <stdlib.h>
-
 #include "trie_t.h"
 
-trie_t *cria_trie()
+void tratar_erro(const char *msg)
 {
-    trie_t *trie;
-    if (!(trie = malloc(sizeof(trie_t))))
-        return NULL;
-    trie->raiz = cria_no();
-    return trie;
+    fprintf(stderr, "%s\n", msg);
+    exit(EXIT_FAILURE);
 }
 
-void libera_trie(trie_t *trie)
-{   
-    if(!trie)
-        return;
-    if(!trie->raiz)
-        return;
+trie_node *criar_no(void)
+{
+    trie_node *novo_no;
+    int i;
 
-    libera_nodo(trie->raiz);
-    free(trie);
+    if (!(novo_no = malloc(sizeof(trie_node))))
+        tratar_erro("ERRO_ALOCACAO");
+
+    novo_no->is_end = 0;
+    for (i = 0; i < TAMANHO_ALFABETO; i++)
+        novo_no->filhos[i] = NULL;
+
+    return novo_no;
 }
 
-nodo_t *cria_no()
+void inserir(trie_node *raiz, const char *chave)
 {
-    nodo_t *no;
-    if (!(no = malloc(sizeof(nodo_t))))
-        return NULL;
-    no->fim = 0;
-    for (int i = 0; i < ALFABETO; i++)
-        no->filho[i] = NULL;
-    return no;
-}
+    trie_node *atual;
+    int nivel;
+    int comprimento;
+    int indice;
 
-void libera_no(nodo_t *no)
-{
-    if(!no)
-        return;
-    for (int i = 0; i < ALFABETO; i++)
-        libera_no(no->filho[i]);
-    free(no);
-}
+    atual = raiz;
+    comprimento = strlen(chave);
 
-int insere_trie(trie_t *trie, char *palavra, int origem)
-{
-    if (!trie)
-        return 0;
-    if (!trie->raiz)
-        return 0;
-    if (!palavra)
-        return 0;
-
-    if (strlen(palavra) < MIN_PALAVRA)
-        return 0;
-    insere_nodo(trie->raiz, palavra, origem);
-    return 1;
-}
-
-int insere_nodo(nodo_t *nodo, char *palavra, int origem)
-{
-    if (!nodo)
-        return 0;
-    if (!palavra)
-        return 0;
-
-    if (*palavra == '\0')
+    for (nivel = 0; nivel < comprimento; nivel++)
     {
-        nodo->fim = 1;
-        nodo->origem = origem;
-        return 1;
+        indice = chave[nivel] - 'a';
+        if (!atual->filhos[indice])
+        {
+            atual->filhos[indice] = criar_no();
+        }
+        atual = atual->filhos[indice];
     }
-    int indice = indice_letra(*palavra);
-    if (!nodo->filho[indice])
-        nodo->filho[indice] = cria_no();
-    return insere_nodo(nodo->filho[indice], palavra + 1, origem);
+
+    atual->is_end = 1;
 }
 
-int insere_nodo(nodo_t *nodo, char *palavra, int origem)
+int buscar(trie_node *raiz, const char *chave)
 {
-    if (!nodo)
-        return 0;
-    if (!palavra)
-        return 0;
+    int nivel;
+    int comprimento = strlen(chave);
+    int indice;
+    trie_node *atual = raiz;
 
-    if (*palavra == '\0')
+    for (nivel = 0; nivel < comprimento; nivel++)
     {
-        nodo->fim = 1;
-        nodo->origem = origem;
-        return 1;
+        indice = chave[nivel] - 'a'; // conversao para indice
+        if (!atual->filhos[indice])
+        {
+            return 0;
+        }
+        atual = atual->filhos[indice];
     }
-    int indice = indice_letra(*palavra);
-    if (!nodo->filho[indice])
-        nodo->filho[indice] = cria_no();
-    return insere_nodo(nodo->filho[indice], palavra + 1, origem);
+
+    return (atual != NULL && atual->is_end);
 }
 
-int indice_letra(char letra)
+int comeca_com(trie_node *raiz, const char *prefixo)
 {
-    if (letra >= 'a' && letra <= 'z')
-        return letra - 'a';
-    if (letra >= 'A' && letra <= 'Z')
-        return letra - 'A' + 26;
-    return -1;
+    int nivel;
+    int comprimento = strlen(prefixo);
+    int indice;
+    trie_node *atual = raiz;
+
+    for (nivel = 0; nivel < comprimento; nivel++)
+    {
+        indice = prefixo[nivel] - 'a';
+        if (!atual->filhos[indice])
+        {
+            return 0;
+        }
+        atual = atual->filhos[indice];
+    }
+
+    return (atual != NULL);
+}
+
+void destruir_trie(trie_node *raiz)
+{
+    if (raiz)
+    {
+        int i;
+        for (i = 0; i < TAMANHO_ALFABETO; i++)
+        {
+            destruir_trie(raiz->filhos[i]);
+        }
+        free(raiz);
+    }
+}
+void imprime_palavras(trie_node *raiz, char palavra[], int nivel)
+{
+    // Verifica se o nó atual é o final de uma palavra
+    if (raiz->is_end)
+    {
+        palavra[nivel] = '\0';   // Adiciona o caractere nulo para indicar o fim da palavra
+        printf("%s\n", palavra); // Imprime a palavra encontrada
+    }
+
+    int i;
+    for (i = 0; i < TAMANHO_ALFABETO; i++)
+    {
+        if (raiz->filhos[i] != NULL)
+        {
+            palavra[nivel] = i + 'a';                              // Converte o índice para o caractere correspondente
+            imprime_palavras(raiz->filhos[i], palavra, nivel + 1); // Chama recursivamente para o próximo nível
+        }
+    }
+}
+
+void imprime(trie_node *raiz)
+{
+    char palavra[TAMANHO_ALFABETO + 1]; // +1 para o caractere nulo
+    imprime_palavras(raiz, palavra, 0); // Chama a função auxiliar para imprimir as palavras
 }

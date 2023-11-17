@@ -1,47 +1,28 @@
+#ifndef TRIE_H
+#define TRIE_H
+
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#define TAMANHO_ALFABETO 26
 
-#define ALFABETO 52
-#define MIN_PALAVRA 3
-/*O objetivo é criar uma base de dados para localizar palavras em um conjunto de arquivos.
-Isso será feito usando árvores digitais (tries) para organizar as palavras contidas nos arquivos.
-Cada registro (palavra) indicará a lista de  arquivos onde a palavra ocorre.
-Esta base de dados será guardada em um arquivo para uso posterior.
-
-*/
-
-typedef struct nodo_t
+typedef struct trie_node
 {
-    struct nodo_t *filho[ALFABETO];
-    int fim;
-    char origem[10];
-} nodo_t;
+    struct trie_node *filhos[TAMANHO_ALFABETO];
+    int is_end;
+} trie_node;
 
-/*cria um ponteiro para a arvore */
-trie_t *cria_trie();
+trie_node *criar_no(void);
 
-/*libera a arvore*/
-void libera_trie(trie_t *trie);
+void inserir(trie_node *raiz, const char *chave);
 
-/*cria um ponteiro para o nodo
-retorna endereço ou NULL em caso de erro*/
-nodo_t *cria_nodo(char letra);
+int buscar(trie_node *raiz, const char *chave);
 
-/*libera o nodo*/
-void libera_nodo(nodo_t *nodo);
+int comeca_com(trie_node *raiz, const char *prefixo);
 
-/*insere uma palavra na arvore
-retorna 1 se sucesso, 0 se falha*/
-int insere_trie(trie_t *trie, char *palavra, int origem);
+void destruir_trie(trie_node *raiz);
 
-/*insere uma palavra no nodo, 
-retorna 1 se sucesso, 0 se falha*/
-int insere_nodo(nodo_t *nodo, char *palavra, int origem);
+void imprime(trie_node *raiz);
 
-/*busca uma palavra na arvore
-retorna 1 se sucesso, 0 se falha*/
-int busca_trie(trie_t *trie, char *palavra);
-
-/*busca uma palavra no nodo
-retorna 1 se sucesso, 0 se falha*/
-int busca_nodo(nodo_t *nodo, char *palavra);
+#endif 
