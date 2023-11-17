@@ -10,3 +10,5 @@ int main()
     imprime(raiz);
     destruir_trie(raiz);
 }
+alias cc='make clean; reset ; make'
+alias giti='make clean; git add .; git commit -m "commit em casa"; git push':
