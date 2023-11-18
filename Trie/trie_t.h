@@ -22,22 +22,23 @@ void tratar_erro(const char *msg);
 
 trie_node *criar_no(void);
 
-void inserir(trie_node *raiz, const char *chave);
+void trie_inserir(trie_node *raiz, const char *chave);
 
-int buscar(trie_node *raiz, const char *chave);
+int trie_busca(trie_node *raiz, const char *chave);
 
-void imprime_prefixo(trie_node *raiz, const char *prefixo);
+void trie_imprime_prefixo(trie_node *raiz, const char *prefixo);
 
-void imprime(trie_node *raiz);
+void trie_imprime(trie_node *raiz);
 
-void destruir_trie(trie_node *raiz);
+void trie_destruir(trie_node *raiz);
 
-int tem_acento(char *str);
+int word_acento(char *str);
 
-void remove_pontuacao(char *str);
+void word_pontua(char *str);
 
-void converte_minusculas(char *str);
-
-
+void word_minusc(char *str);
 
 #endif
+
+
+

@@ -11,8 +11,6 @@ void tratar_erro(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-#define TAMANHO_ALFABETO 26
-
 trie_node *criar_no(void)
 {
     trie_node *novo_no = (trie_node *)malloc(sizeof(trie_node));
@@ -109,7 +107,7 @@ void trie_destruir(trie_node *raiz)
     {
         for (int i = 0; i < TAMANHO_ALFABETO; i++)
         {
-            destruir_trie(raiz->filhos[i]);
+           trie_destruir(raiz->filhos[i]);
         }
         free(raiz);
     }

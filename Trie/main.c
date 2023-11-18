@@ -8,8 +8,9 @@
 int main()
 {
     trie_node *raiz;
-    raiz = criar_no();
     FILE *arq;
+
+    raiz = criar_no();
 
     setlocale(LC_CTYPE, "");
 
@@ -21,16 +22,16 @@ int main()
     {
         char palavra[100];
         fscanf(arq, "%s", palavra);
-        remove_pontuacao(palavra);
-        if (!tem_acento(palavra) && strlen(palavra) >= 4)
+    
+        word_pontua(palavra);
+        if (!word_acento(palavra) && strlen(palavra) >= 4)
         {
-            converte_minusculas(palavra);
+            word_minusc(palavra);
             printf("%s\n", palavra);
+            trie_inserir(raiz, palavra);
         }
     }
-    imprime(raiz);
     fclose(arq);
-
-    imprime(raiz);
-    destruir_trie(raiz);
+    
+    trie_destruir(raiz);
 }
