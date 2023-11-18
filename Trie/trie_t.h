@@ -18,12 +18,17 @@ typedef struct trie_node
     int is_end;
 } trie_node;
 
+/* Finaliza execucao e imprime a mensagem
+ que foi passada como parametro*/
 void tratar_erro(const char *msg);
 
+/* Cria um novo no da trie e retorna o ponteiro para ele */
 trie_node *criar_no(void);
 
+/* Insere uma nova chave na trie */
 void trie_inserir(trie_node *raiz, const char *chave);
 
+/* Busca uma chave na trie */
 int trie_busca(trie_node *raiz, const char *chave);
 
 void trie_imprime_prefixo(trie_node *raiz, const char *prefixo);
