@@ -7,6 +7,11 @@
 
 #define TAMANHO_ALFABETO 26
 
+typedef struct tree_trie
+{
+    struct trie_node **raiz;
+} tree_trie;
+
 typedef struct trie_node
 {
     struct trie_node *filhos[TAMANHO_ALFABETO];
@@ -21,10 +26,18 @@ void inserir(trie_node *raiz, const char *chave);
 
 int buscar(trie_node *raiz, const char *chave);
 
-int comeca_com(trie_node *raiz, const char *prefixo);
-
-void destruir_trie(trie_node *raiz);
+void imprime_prefixo(trie_node *raiz, const char *prefixo);
 
 void imprime(trie_node *raiz);
 
-#endif 
+void destruir_trie(trie_node *raiz);
+
+int tem_acento(char *str);
+
+void remove_pontuacao(char *str);
+
+void converte_minusculas(char *str);
+
+
+
+#endif
