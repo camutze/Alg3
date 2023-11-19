@@ -1,1 +1,61 @@
-.txt sd asdsd s
+
+O objetivo do trabalho é a implementação de uma base de dados para localização de palavras em um conjunto de arquivos.
+
+Base de dados:
+A base de dados conterá as palavras existentes nos arquivos organizadas usando árvores digitais (tries) possivelmente implementadas com remoção de nós com filho único. Cada registro (palavra) indicará a lista de arquivos onde a palavra acontece. A base deve ser guardada em arquivo para poder ser usada posteriormente.
+
+Esse arquivo é de formato livre e deve conter a estrutura da árvore.
+
+Aplicações:
+Duas aplicações devem ser feitas.
+
+A primeira aplicação será um pequeno programa, chamado insere, que recebe como parâmetro (linha de comando) os nomes de dois arquivos. O primeiro é o arquivo da base de dados e o segundo, um arquivo texto, onde as palavras serão procuradas. A chamada seria algo como:
+
+> insere base arquivo-texto
+
+As palavras encontradas no arquivo texto são inseridas na base já existente. Caso o arquivo da base não exista, ele é criado. Caso o arquivo de texto não exista, nada acontece (nem mensagem de erro).
+
+As palavras a serem procuradas e armazenadas na base são definidas como:
+
+[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]+
+
+Ou seja, seqüencias maximais de letras com 4 ou mais símbolos. Assuma que caracteres acentuados não aparecem.
+
+A segunda aplicação será uma ferramenta de busca, chamada procura, que recebe como parâmetro (linha de comando) o nome de um arquivo e uma string. O arquivo é o arquivo com a base de dados e a string é um prefixo. A chamada seria algo como:
+
+> procura base prefixo
+
+Esta ferramenta executa uma busca na base de dados e escreve na saída padrão (stdout) uma lista de arquivos que contém palavras que iniciem com o prefixo dado, um arquivo por linha. O nome de cada arquivo deve ser precedido do prefixo procurado e um espaço.
+
+Nenhuma outra mensagem deve ser escrita na saída padrão (stdout). Caso o arquivo da base não exista ou algum parâmetro estiver faltando, uma mensagem apropriada deve ser escrita na saída padrão de erro (stderr). Se não for encontrada nenhuma palavra com o prefixo a ferramenta não escreve nada.
+
+Requisitos mínimos:
+O trabalho deve ser feito de forma que possa ser compilado e executado nas servidoras de computação do Departamento de Informática.
+
+Não devem ter nenhuma opção de linha comando que não esteja especificada aqui.
+
+O que deve ser entregue:
+Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README explicando o que foi feito e com o nome dos autores. Qualquer particularidade deve estar descrita neste texto, inclusive o formato do arquivo com a base de dados.
+
+Para compilar vou usar o comando make (sem nenhum parâmetro), portanto preparem o Makefile para fazer isso.
+
+Para testar vou rodar um script como o abaixo.
+
+   insere base texto1
+   insere base texto2
+   ...
+   insere base texton
+   procura base prefixo1 > teste.out
+   procura base prefixo2 >> teste.out
+   ...
+   procura base prefixok >> teste.out
+   diff teste.sol teste.out
+Caso o teste seja positivo (não imprime nada) será analisado o código fonte.
+
+Forma de entrega:
+O trabalho deve ser empacotado em um arquivo login1-login2.tar.gz, onde login1-login2 é uma string com os logins dos integrantes da equipe nas servidoras do DInf. Ao descompactar este arquivo o make e o script acima deverão funcionar dentro do diretório local (não em subdiretórios).
+
+Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o assunto "CI1057-trab2" (exatamente).
+
+Equipe:
+O trabalho pode ser feito em equipes de até 2 (dois) alunos.

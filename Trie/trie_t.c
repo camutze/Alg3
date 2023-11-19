@@ -11,6 +11,32 @@ void tratar_erro(const char *msg)
     exit(EXIT_FAILURE);
 }
 
+arvore_trie *criar_arvore(char *arquivo, FILE *base)
+{
+    arvore_trie *nova_arvore;
+    if(!base)
+        tratar_erro("ERRO_AO_ABRIR_ARQUIVO_BASE");
+
+    if(!(nova_arvore = (arvore_trie *)malloc(sizeof(arvore_trie))))
+        tratar_erro("ERRO_AO_CRIAR_ARVORE");
+
+    
+
+    if(!(nova_arvore->arquivos = malloc(sizeof(char *))))
+        tratar_erro("ERRO_AO_CRIAR_ARVORE_ARQUIVOS");
+    for(int i = 0; i < N_DE_ARQUIVOS; i++)
+    {
+        if(!(nova_arvore->arquivos[i] = malloc(sizeof(char) * 20)))
+            tratar_erro("ERRO_AO_CRIAR_ARVORE_ARQUIVOS");
+    }
+    strcpy(nova_arvore->arquivos[0], arquivo);
+
+    nova_arvore->raiz = criar_no();
+    return nova_arvore;
+    
+}
+
+
 trie_node *criar_no(void)
 {
     trie_node *novo_no = (trie_node *)malloc(sizeof(trie_node));
@@ -22,7 +48,6 @@ trie_node *criar_no(void)
             novo_no->filhos[i] = NULL;
         }
     }
-
     return novo_no;
 }
 
@@ -41,6 +66,7 @@ void trie_inserir(trie_node *raiz, const char *chave)
         atual = atual->filhos[indice];
     }
 
+    
     atual->is_end = 1;
 }
 
@@ -102,22 +128,24 @@ void trie_imprime(trie_node *raiz)
     }
 }
 
-void trie_destruir(trie_node *raiz)
+void trie_destruir_nodo(trie_node *raiz)
 {
     if (raiz)
     {
         for (int i = 0; i < TAMANHO_ALFABETO; i++)
         {
-           trie_destruir(raiz->filhos[i]);
+           trie_destruir_nodo(raiz->filhos[i]);
         }
+        free(raiz->id_arquivo);
         free(raiz);
     }
+
 }
 
 /*Retorna 0 se existe pelo menos um acento, 1 caso contrario*/
 int word_acento(char *str)
 {
-    char *com_acentos = "áàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ";
+    char *com_acentos = "ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ";
 
     for (int i = 0; str[i] != '\0'; ++i)
         for (int j = 0; com_acentos[j] != '\0'; j++)

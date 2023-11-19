@@ -6,23 +6,26 @@
 #include <string.h>
 
 #define TAMANHO_ALFABETO 26
-#define N_MAX_ARQUIVOS 14 //numero maximo de arquivos que podem ser lidos
+#define N_DE_ARQUIVOS 14 //numero maximo de arquivos que podem ser lidos
 
 typedef struct tree_trie
 {
-    struct trie_node **raiz;
-} tree_trie;
+    struct trie_node *raiz;
+    char **arquivos;
+} arvore_trie;
 
 typedef struct trie_node
 {
     struct trie_node *filhos[TAMANHO_ALFABETO];
-    char **origem[N_MAX_ARQUIVOS];
+    unsigned short *id_arquivo; //vetorque armazena e associa o id do arquivo com a palavra
     int is_end;
 } trie_node;
 
 /* Finaliza execucao e imprime a mensagem
  que foi passada como parametro*/
 void tratar_erro(const char *msg);
+
+arvore_trie *criar_arvore(char *arquivo, FILE *base);
 
 /* Cria um novo no da trie e retorna o ponteiro para ele */
 trie_node *criar_no(void);
@@ -38,7 +41,7 @@ void trie_imprime_prefixo(trie_node *raiz, const char *prefixo);
 
 void trie_imprime(trie_node *raiz);
 
-void trie_destruir(trie_node *raiz);
+void trie_destruir_nodo(trie_node *raiz);
 
 int word_acento(char *str);
 

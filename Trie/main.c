@@ -5,41 +5,28 @@
 
 #include "trie_t.h"
 
-FILE *cria_base()
-{
-    FILE *base;
-    base = fopen("base.txt", "w");
-    if (!base)
-        tratar_erro("ERRO_AO_CRIAR_ARQUIVO");
-
-    return base;
-}
 int main(int argc, char **argv)
 {
-    trie_node *raiz;
+    arvore_trie *arvore;
     FILE *base, *arq;
 
     setlocale(LC_CTYPE, "");
+    /* tres casos
+        base.txt arquivo
+        arquivo.txt
+        base.txt*/
 
-    if (argc < 1)
-        tratar_erro("ERRO_FALTA_PARAMETRO 25");
+    printf("argc: %d\n", argc);
+    if (argc < 3)
+        tratar_erro("ERRO_FALTA_PARAMETRO");
 
-    if (strcmp(argv[1], "base.txt")) // se for difente de base.txt
-    {
-        if (!(base = cria_base()))
-            tratar_erro("ERRO_AO_CRIAR_ARQUIVO 26");
+    if (!(base = fopen(argv[1], "a")))
+        tratar_erro("ERRO_AO_ABRIR_ARQUIVO_BASE");
+        
+    if (!(arq = fopen(argv[2], "r")))
+        tratar_erro("ERRO_AO_ABRIR_ARQUIVO_ARQ");
 
-        arq = fopen(argv[1], "r");
-    }
-    else
-        tratar_erro("A BASE NAO PODE SER A MESMA DO ARQUIVO DE ENTRADA");
-
-    printf("Origem do arquivo: %d\n", argc);
-    printf("Origem do arquivo: %s\n", argv[1]);
-
-    //
-
-    raiz = criar_no();
+    arvore = criar_arvore(argv[1], base);
 
     while (!feof(arq))
     {
@@ -51,12 +38,17 @@ int main(int argc, char **argv)
         {
             word_sem_minusc(palavra);
             printf("%s\n", palavra);
-            trie_inserir(raiz, palavra);
+            trie_inserir(arvore->raiz, palavra);
+
+            fprintf(base, "%s %s\n", palavra, argv[2]);
+            
         }
     }
     fclose(arq);
     fclose(base);
 
-    trie_imprime(raiz);
-    trie_destruir(raiz);
+    trie_imprime(arvore->raiz);
+    trie_destruir_nodo(arvore->raiz);
+    free(arvore->arquivos);
+    free(arvore);
 }
