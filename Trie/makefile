@@ -16,11 +16,13 @@ clean:
 	rm -f *.o *~ $(MAIN) $(ENTREGA) $(ENTREGA).tgz
 cc:
 	make clean ; reset ; make
+push:
+	git add . ; git commit -m "Makefile automático" ; git push
 
 entrega: clean
 	mkdir $(ENTREGA)
 	cp *.c *.h makefile $(ENTREGA)
-	rm -f $(ENTREGA)/testa*
+	rm -f $(ENTREGA)/testa* 
 	chmod 600 $(ENTREGA)/*
 	tar czvf $(ENTREGA).tgz $(ENTREGA)
 	rm -rf $(ENTREGA)

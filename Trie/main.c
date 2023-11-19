@@ -5,24 +5,41 @@
 
 #include "trie_t.h"
 
+FILE *cria_base()
+{
+    FILE *base;
+    base = fopen("base.txt", "w");
+    if (!base)
+        tratar_erro("ERRO_AO_CRIAR_ARQUIVO");
+
+    return base;
+}
 int main(int argc, char **argv)
 {
     trie_node *raiz;
-    FILE *arq;
-
-    raiz = criar_no();
-
+    FILE *base, *arq;
+    
     setlocale(LC_CTYPE, "");
 
-    arq = fopen("palavras.txt", "r"); // nome do arquivo e modo de abertura, r é de read
+    base = fopen("base.txt", "r");
+    if (!base)
+        base = cria_base();
+    
+
+    arq = fopen(argv[2], "r");
     if (!arq)
-        tratar_erro("ERRO_ABRIR_ARQUIVO"); // arrumar isso aqui
+        tratar_erro("ERRO_ABRIR_ARQUIVO");
+
+    printf("Origem do arquivo: %s\n", argv[2]);
+    
+
+    raiz = criar_no();
 
     while (!feof(arq))
     {
         char palavra[100];
         fscanf(arq, "%s", palavra);
-    
+
         word_pontua(palavra);
         if (word_acento(palavra) && strlen(palavra) >= 4)
         {
@@ -30,9 +47,9 @@ int main(int argc, char **argv)
             printf("%s\n", palavra);
             trie_inserir(raiz, palavra);
         }
-
     }
     fclose(arq);
 
+    trie_imprime(raiz);
     trie_destruir(raiz);
 }
