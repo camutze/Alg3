@@ -22,7 +22,7 @@ push:
 entrega: clean
 	mkdir $(ENTREGA)
 	cp *.c *.h makefile $(ENTREGA)
-	rm -f $(ENTREGA)/testa* 
+	rm *.o 
 	chmod 600 $(ENTREGA)/*
 	tar czvf $(ENTREGA).tgz $(ENTREGA)
 	rm -rf $(ENTREGA)
