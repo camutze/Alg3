@@ -17,8 +17,8 @@ clean:
 cc:
 	make clean ; reset ; make
 push:
-	git add . ; git commit -m "Makefile automático" ; git push
-	
+	make clen; git add . ; git commit -m "Makefile automático" ; git push
+
 entrega: clean
 	mkdir $(ENTREGA)
 	cp *.c *.h makefile $(ENTREGA)
