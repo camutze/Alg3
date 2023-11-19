@@ -20,3 +20,8 @@ A seguir, explicarei as estruturas utilizadas em cada um deles e o motivo para t
 # Arquivo .c (implementação) da biblioteca de árvore Trie: trie_t.c:
 
 # Arquivo .txt com texto da Eneida de Virgílio:
+
+# Arquivo .txt com texto bla bla bla:
+
+# Arquivo makefile para compilação do programa:
+ 
