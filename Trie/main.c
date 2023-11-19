@@ -5,7 +5,7 @@
 
 #include "trie_t.h"
 
-int main()
+int main(int argc, char **argv)
 {
     trie_node *raiz;
     FILE *arq;
@@ -24,14 +24,15 @@ int main()
         fscanf(arq, "%s", palavra);
     
         word_pontua(palavra);
-        if (!word_acento(palavra) && strlen(palavra) >= 4)
+        if (word_acento(palavra) && strlen(palavra) >= 4)
         {
-            word_minusc(palavra);
+            word_sem_minusc(palavra);
             printf("%s\n", palavra);
             trie_inserir(raiz, palavra);
         }
+
     }
     fclose(arq);
-    
+
     trie_destruir(raiz);
 }

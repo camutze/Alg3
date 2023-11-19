@@ -15,6 +15,7 @@ typedef struct tree_trie
 typedef struct trie_node
 {
     struct trie_node *filhos[TAMANHO_ALFABETO];
+    char *origem;
     int is_end;
 } trie_node;
 
@@ -41,7 +42,8 @@ int word_acento(char *str);
 
 void word_pontua(char *str);
 
-void word_minusc(char *str);
+void word_sem_minusc(char *str);
+
 
 #endif
 

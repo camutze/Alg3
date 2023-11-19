@@ -39,6 +39,7 @@ void trie_inserir(trie_node *raiz, const char *chave)
         }
         atual = atual->filhos[indice];
     }
+    
 
     atual->is_end = 1;
 }
@@ -113,7 +114,7 @@ void trie_destruir(trie_node *raiz)
     }
 }
 
-/*Tratamento de Palavras*/
+/*Retorna 0 se existe pelo menos um acento, 1 caso contrario*/
 int word_acento(char *str)
 {
     char *com_acentos = "áàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ";
@@ -121,8 +122,8 @@ int word_acento(char *str)
     for (int i = 0; str[i] != '\0'; ++i)
         for (int j = 0; com_acentos[j] != '\0'; j++)
             if (str[i] == com_acentos[j])
-                return 1;
-    return 0;
+                return 0;
+    return 1;
 }
 
 void word_pontua(char *str)
@@ -139,7 +140,7 @@ void word_pontua(char *str)
     str[j] = '\0';
 }
 
-void word_minusc(char *str)
+void word_sem_minusc(char *str)
 {
     int len = strlen(str);
     for (int i = 0; i < len; i++)
