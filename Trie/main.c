@@ -18,20 +18,26 @@ int main(int argc, char **argv)
 {
     trie_node *raiz;
     FILE *base, *arq;
-    
+
     setlocale(LC_CTYPE, "");
 
-    base = fopen("base.txt", "r");
-    if (!base)
-        base = cria_base();
-    
+    if (argc < 1)
+        tratar_erro("ERRO_FALTA_PARAMETRO 25");
 
-    arq = fopen(argv[2], "r");
-    if (!arq)
-        tratar_erro("ERRO_ABRIR_ARQUIVO");
+    if (strcmp(argv[1], "base.txt")) // se for difente de base.txt
+    {
+        if (!(base = cria_base()))
+            tratar_erro("ERRO_AO_CRIAR_ARQUIVO 26");
 
-    printf("Origem do arquivo: %s\n", argv[2]);
-    
+        arq = fopen(argv[1], "r");
+    }
+    else
+        tratar_erro("A BASE NAO PODE SER A MESMA DO ARQUIVO DE ENTRADA");
+
+    printf("Origem do arquivo: %d\n", argc);
+    printf("Origem do arquivo: %s\n", argv[1]);
+
+    //
 
     raiz = criar_no();
 
@@ -49,6 +55,7 @@ int main(int argc, char **argv)
         }
     }
     fclose(arq);
+    fclose(base);
 
     trie_imprime(raiz);
     trie_destruir(raiz);

@@ -6,6 +6,7 @@
 #include <string.h>
 
 #define TAMANHO_ALFABETO 26
+#define N_MAX_ARQUIVOS 14 //numero maximo de arquivos que podem ser lidos
 
 typedef struct tree_trie
 {
@@ -15,7 +16,7 @@ typedef struct tree_trie
 typedef struct trie_node
 {
     struct trie_node *filhos[TAMANHO_ALFABETO];
-    char *origem;
+    char **origem[N_MAX_ARQUIVOS];
     int is_end;
 } trie_node;
 
@@ -31,6 +32,7 @@ void trie_inserir(trie_node *raiz, const char *chave);
 
 /* Busca uma chave na trie */
 int trie_busca(trie_node *raiz, const char *chave);
+
 
 void trie_imprime_prefixo(trie_node *raiz, const char *prefixo);
 

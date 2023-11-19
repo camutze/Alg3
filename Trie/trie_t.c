@@ -22,6 +22,7 @@ trie_node *criar_no(void)
             novo_no->filhos[i] = NULL;
         }
     }
+
     return novo_no;
 }
 
@@ -39,7 +40,6 @@ void trie_inserir(trie_node *raiz, const char *chave)
         }
         atual = atual->filhos[indice];
     }
-    
 
     atual->is_end = 1;
 }
