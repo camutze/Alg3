@@ -1,53 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
-#include <ctype.h>
 
-#include "trie_t.h"
-void tratar_erro(const char *msg)
+#define ALFABETO (26)                        // Tamanho do alfabeto (número de letras)
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a') // Converte caractere para índice
+
+// Estrutura do nó da Trie
+typedef struct TrieNode
 {
-    fprintf(stderr, "%s\n", msg);
-    exit(EXIT_FAILURE);
-}
+    struct TrieNode *filhos[ALFABETO];
+    int fimDaPalavra;
+    char *origemArquivo; // Adicionado campo para armazenar a origem do arquivo
+} TrieNode;
 
-
-
-/*Retorna 0 se existe pelo menos um acento, 1 caso contrario*/
-int word_acento(char *str)
+// Cria um novo nó da Trie
+TrieNode *criaNo()
 {
-    char *com_acentos = "ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ";
-
-    for (int i = 0; str[i] != '\0'; ++i)
-        for (int j = 0; com_acentos[j] != '\0'; j++)
-            if (str[i] == com_acentos[j])
-                return 0;
-    return 1;
-}
-
-void word_pontua(char *str)
-{
-    int len = strlen(str);
-    int j = 0;
-    for (int i = 0; i < len; i++)
+    TrieNode *novoNo = NULL;
+    novoNo = (TrieNode *)malloc(sizeof(TrieNode));
+    if (novoNo)
     {
-        if (!ispunct(str[i]))
-        {
-            str[j++] = str[i];
-        }
+        int i;
+        novoNo->fimDaPalavra = 0;
+        novoNo->origemArquivo = NULL; // Inicializa o campo origemArquivo como NULL
+        for (i = 0; i < ALFABETO; i++)
+            novoNo->filhos[i] = NULL;
     }
-    str[j] = '\0';
+    return novoNo;
 }
 
-void word_sem_minusc(char *str)
+// Insere uma palavra na Trie
+void insere(TrieNode *raiz, const char *palavra, const char *origemArquivo)
 {
-    int len = strlen(str);
-    for (int i = 0; i < len; i++)
+    int nivel;
+    int comprimento = strlen(palavra);
+    int indice;
+    TrieNode *p = raiz;
+    for (nivel = 0; nivel < comprimento; nivel++)
     {
-        if (isupper(str[i]))
-        {
-            str[i] = tolower(str[i]); // converte para minuscula
-        }
+        indice = CHAR_TO_INDEX(palavra[nivel]);
+        if (!p->filhos[indice])
+            p->filhos[indice] = criaNo();
+        p = p->filhos[indice];
     }
+    p->fimDaPalavra = 1;
+    p->origemArquivo = strdup(origemArquivo); // Armazena a origem do arquivo
 }
 
+// Retorna 1 se a palavra é encontrada na Trie, caso contrário retorna 0
+int busca(TrieNode *raiz, const char *palavra)
+{
+    int nivel;
+    int comprimento = strlen(palavra);
+    int indice;
+    TrieNode *p = raiz;
+    for (nivel = 0; nivel < comprimento; nivel++)
+    {
+        indice = CHAR_TO_INDEX(palavra[nivel]);
+        if (!p->filhos[indice])
+            return 0;
+        p = p->filhos[indice];
+    }
+    if (p != NULL && p->fimDaPalavra)
+    {
+        printf("Origem do arquivo: %s\n", p->origemArquivo); // Imprime a origem do arquivo
+        return 1;
+    }
+    return 0;
+}
+
+// Libera a memória alocada para a Trie
+void destroi(TrieNode *no)
+{
+    int i;
+    for (i = 0; i < ALFABETO; i++)
+        if (no->filhos[i])
+            destroi(no->filhos[i]);
+    free(no->origemArquivo); // Libera a memória alocada para origemArquivo
+    free(no);
+}

@@ -1,22 +1,31 @@
-#ifndef TRIE_H
-#define TRIE_H
+#ifndef TRIE_T_H
+#define TRIE_T_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void tratar_erro(const char *msg);
+#define ALFABETO (26)                        // Tamanho do alfabeto (número de letras)
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a') // Converte caractere para índice
 
-int word_acento(char *str);
+// Estrutura do nó da Trie
+typedef struct TrieNode
+{
+    struct TrieNode *filhos[ALFABETO];
+    int fimDaPalavra;
+    char *origemArquivo; // Adicionado campo para armazenar a origem do arquivo
+} TrieNode;
 
-void word_pontua(char *str);
+// Cria um novo nó da Trie
+TrieNode *criaNo();
 
-void word_sem_minusc(char *str);
+// Insere uma palavra na Trie
+void insere(TrieNode *raiz, const char *palavra, const char *origemArquivo);
 
+// Retorna 1 se a palavra é encontrada na Trie, caso contrário retorna 0
+int busca(TrieNode *raiz, const char *palavra);
 
-
+// Libera a memória alocada para a Trie
+void destroi(TrieNode *no);
 
 #endif
-
-
-

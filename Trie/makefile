@@ -4,12 +4,12 @@ MAIN    =  main
 ENTREGA = $(MAIN)-entrega
 
 # programa principal
-$(MAIN):   $(MAIN).o main.o trie_t.o
-$(MAIN).o: $(MAIN).c trie_t.h
+$(MAIN):   $(MAIN).o main.o 
+$(MAIN).o: $(MAIN).c
 
 
 # TADs
-trie_t.o: trie_t.c trie_t.h
+#trie_t.o: trie_t.c trie_t.h
 
 
 clean:
