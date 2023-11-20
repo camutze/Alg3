@@ -56,7 +56,7 @@ void print_trie(TrieNode *root, char str[], int level)
 
 void print_prefix(TrieNode *root, const char *prefix)
 {
-    printf("Palavras com prefixo %s:", prefix);
+    printf("Palavras com prefixo %s:\n", prefix);
     TrieNode *pCrawl = root;
     while (*prefix != '\0')
     {
@@ -79,19 +79,6 @@ void destroy(TrieNode *root)
     free(root);
 }
 /**************************************/
-void export_trie(TrieNode *root, FILE *file)
-{
-    fwrite(&(root->is_end_of_word), sizeof(root->is_end_of_word), 1, file);
-    for (int i = 0; i < ALPHABET_SIZE; i++)
-    {
-        if (root->children[i])
-        {
-            fputc('a' + i, file);
-            export_trie(root->children[i], file);
-        }
-    }
-    fputc('}', file); // Indica o fim dos filhos de um nó
-}
 
 int tem_acento(char *str)
 {
@@ -136,6 +123,21 @@ void tudo_minusculo(char *str)
         }
     }
 }
+
+void export_trie(TrieNode *root, FILE *file)
+{
+    fwrite(&(root->is_end_of_word), sizeof(root->is_end_of_word), 1, file);
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+        if (root->children[i])
+        {
+            fputc('a' + i, file);
+            export_trie(root->children[i], file);
+        }
+    }
+    fputc('}', file); // Indica o fim dos filhos de um nó
+}
+
 int main(int argc, char *argv[])
 {
     TrieNode *root = get_node();
@@ -168,7 +170,8 @@ int main(int argc, char *argv[])
     }
 
 
-
+    export_trie(root, base);
+    
     fclose(arquivo);
     fclose(base);
     
