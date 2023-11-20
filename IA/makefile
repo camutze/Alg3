@@ -26,4 +26,4 @@ entrega: clean
 	chmod 600 $(ENTREGA)/*
 	tar czvf $(ENTREGA).tgz $(ENTREGA)
 	rm -rf $(ENTREGA)
-	@echo "Arquivo $(ENTREGA).tgz criado para entrega"
+	@echo "Arquivo $(ENTREGA).tgz criado para entrega"pw

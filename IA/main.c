@@ -8,9 +8,8 @@
 int main(int argc, char **argv)
 {
     FILE *base, *arq;
-
+    trie_node *raiz;
     setlocale(LC_ALL, "pt_BR.UTF-8");
-
 
     printf("argc: %d\n", argc);
     if (argc < 3)
@@ -22,22 +21,20 @@ int main(int argc, char **argv)
     if (!(arq = fopen(argv[2], "r")))
         tratar_erro("ERRO_AO_ABRIR_ARQUIVO_ARQ");
 
+    raiz = criar_no();
+
     while (!feof(arq))
     {
         char palavra[100];
         fscanf(arq, "%s", palavra);
-        if (strlen(palavra) > 4)
+        word_pontua(palavra);
+        if (strlen(palavra) > 4 && word_tem_acento(palavra))
         {
-            printf("\n\nORIGINAL: %s\n", palavra);
-            word_pontua(palavra);
-            printf("PONTUADA: %s\n", palavra);
-            if(word_tem_acento(palavra))
-                printf("TEM ACENTO\n");
-            else
-                printf("NÃO TEM ACENTO\n\n\n");
-        }
+            trie_inserir(raiz, palavra, argv[2]);
 
+        }
     }
+    trie_destruir(raiz);
     fclose(base);
     fclose(arq);
-    }
+}
