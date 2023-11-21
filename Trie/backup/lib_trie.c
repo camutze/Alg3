@@ -5,7 +5,6 @@
 
 #include "lib_trie.h"
 
-
 TrieNode *get_node()
 {
     TrieNode *node;
@@ -17,7 +16,7 @@ TrieNode *get_node()
 
     node->eh_final = 0;
     for (int i = 0; i < ALPHABET_SIZE; i++)
-        node->filhos[i] = NULL;
+        node->children[i] = NULL;
     return node;
 }
 
@@ -28,12 +27,12 @@ void insert(TrieNode *raiz, const char *palavra, const char *origem)
     while (*palavra != '\0')
     {
         index = *palavra - 'a';
-        if (pCrawl->filhos[index] == NULL)
+        if (pCrawl->children[index] == NULL)
         {
-            pCrawl->filhos[index] = get_node();
-            strcpy(pCrawl->filhos[index]->origem, origem); // Copia a origem para o novo nó
+            pCrawl->children[index] = get_node();
+            strcpy(pCrawl->children[index]->origem, origem); // Copia a origem para o novo nó
         }
-        pCrawl = pCrawl->filhos[index];
+        pCrawl = pCrawl->children[index];
         palavra++;
     }
     pCrawl->eh_final = 1;
@@ -50,10 +49,10 @@ void print_trie(TrieNode *raiz, char str[], int nivel)
 
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        if (raiz->filhos[i])
+        if (raiz->children[i])
         {
             str[nivel] = i + 'a';
-            print_trie(raiz->filhos[i], str, nivel + 1);
+            print_trie(raiz->children[i], str, nivel + 1);
         }
     }
 }
@@ -65,9 +64,9 @@ void print_prefix(TrieNode *raiz, const char *prefix)
     while (*prefix != '\0')
     {
         int index = *prefix - 'a';
-        if (!pCrawl->filhos[index])
+        if (!pCrawl->children[index])
             return;
-        pCrawl = pCrawl->filhos[index];
+        pCrawl = pCrawl->children[index];
         prefix++;
     }
 
@@ -78,8 +77,8 @@ void print_prefix(TrieNode *raiz, const char *prefix)
 void destroy(TrieNode *raiz)
 {
     for (int i = 0; i < ALPHABET_SIZE; i++)
-        if (raiz->filhos[i] != NULL)
-            destroy(raiz->filhos[i]);
+        if (raiz->children[i] != NULL)
+            destroy(raiz->children[i]);
     free(raiz);
 }
 
@@ -138,10 +137,10 @@ void export_trie(FILE *base, TrieNode *raiz, char str[], int nivel)
 
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        if (raiz->filhos[i])
+        if (raiz->children[i])
         {
             str[nivel] = i + 'a';
-            export_trie(base, raiz->filhos[i], str, nivel + 1);
+            export_trie(base, raiz->children[i], str, nivel + 1);
         }
     }
 }
