@@ -3,14 +3,15 @@
 #include <string.h>
 #include <ctype.h>
 
-#define ALPHABET_SIZE 26
+#define ALPHABET_SIZE 52
 #define TAM_PALAVRA 40
 #define TAM_ARQUIVO 100
 
-typedef struct trie_node {
+typedef struct trie_node
+{
     struct trie_node *children[ALPHABET_SIZE];
+    char origem[TAM_ARQUIVO]; // Adiciona campo para armazenar a origem do arquivo
     int is_end_of_word;
-    char origem[TAM_ARQUIVO];  // Adiciona campo para armazenar a origem do arquivo
 } TrieNode;
 
 TrieNode *get_node()
@@ -45,7 +46,8 @@ void print_trie(TrieNode *root, char str[], int level)
     if (root->is_end_of_word)
     {
         str[level] = '\0';
-        printf("%s\n", str);
+        printf("%s ", str);
+        printf("%s\n", root->origem);
     }
 
     for (int i = 0; i < ALPHABET_SIZE; i++)
@@ -127,48 +129,48 @@ void tudo_minusculo(char *str)
     }
 }
 
-void export_trie(TrieNode *root, FILE *file)
+void export_trie(FILE *base, TrieNode *root, char str[], int level)
 {
-    fwrite(root, sizeof(TrieNode), 1, file);
+    if (root->is_end_of_word)
+    {
+        str[level] = '\0';
+        fprintf(base, "%s ", str);
+        fprintf(base, "%s\n", root->origem);
+    }
+
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        if (root->children[i] != NULL)
+        if (root->children[i])
         {
-            fputc('1', file); // Indica que o próximo nó existe
-            export_trie(root->children[i], file);
-        }
-        else
-        {
-            fputc('0', file); // Indica que o próximo nó não existe
+            str[level] = i + 'a';
+            export_trie(base, root->children[i], str, level + 1);
         }
     }
 }
 
-TrieNode *import_trie(FILE *file)
+void import_trie(FILE *base, TrieNode *root)
 {
-    TrieNode *root = get_node();
-    fread(root, sizeof(TrieNode), 1, file);
-    for (int i = 0; i < ALPHABET_SIZE; i++)
+    char word[TAM_PALAVRA];
+    char origem[TAM_ARQUIVO];
+
+    while (fscanf(base, "%s %s", word, origem) == 2)
     {
-        if (fgetc(file) == '1') // Se o próximo nó existir
-        {
-            root->children[i] = import_trie(file);
-        }
+        insert(root, word, origem);
     }
-    return root;
 }
 
 int main(int argc, char *argv[])
 {
-    TrieNode *root = get_node();
+    TrieNode *root;
     FILE *base, *arquivo;
+    root = get_node();
 
     if (argc != 3)
     {
         printf("Uso: %s <arquivo base de dados> <arquivo de saída>\n", argv[0]);
         return 1;
     }
-    if (!(base = fopen(argv[1], "a")))
+    if (!(base = fopen(argv[1], "r")))
     {
         printf("Erro ao abrir o arquivo %s\n", argv[1]);
         return 1;
@@ -178,25 +180,26 @@ int main(int argc, char *argv[])
         printf("Erro ao abrir o arquivo %s\n", argv[2]);
         return 1;
     }
-
-    while (!feof(arquivo))
+    import_trie(base, root);
+    /*while (!feof(arquivo))
     {
         char palavra[TAM_PALAVRA];
         fscanf(arquivo, "%25s", palavra);
         retira_pontuação(palavra);
         tudo_minusculo(palavra);
         if (!tem_acento(palavra) && strlen(palavra) >= 4)
-            insert(root, palavra,argv[2]);
-    }
+            insert(root, palavra, argv[2]);
+    }*/
 
-    export_trie(root, base);
-
+    char str[TAM_PALAVRA];
+    //export_trie(base, root, str, 0);
     fclose(arquivo);
     fclose(base);
 
-    char str[TAM_PALAVRA];
     print_trie(root, str, 0);
-    print_prefix(root, "carr");
+    printf("\n\n");
+    print_prefix(root, "ca");
+
     destroy(root);
     return 0;
 }
