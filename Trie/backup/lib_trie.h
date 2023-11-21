@@ -7,7 +7,7 @@
 
 typedef struct trie_node
 {
-    struct trie_node *filhos[ALPHABET_SIZE];
+    struct trie_node *children[ALPHABET_SIZE];
     char origem[TAM_ARQUIVO]; // Adiciona campo para armazenar a origem do arquivo
     int eh_final;
 } TrieNode;
