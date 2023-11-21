@@ -17,7 +17,7 @@ TrieNode *get_node();
 
 void insert(TrieNode *raiz, const char *palavra, const char *origem);
 
-void print_trie(TrieNode *raiz, char str[], int level);
+void print_trie(TrieNode *raiz, char str[], int nivel);
 
 void print_prefix(TrieNode *raiz, const char *prefix);
 
@@ -29,7 +29,7 @@ void retira_pontuacao(char *str);
 
 void tudo_minusculo(char *str);
 
-void export_trie(FILE *base, TrieNode *raiz, char str[], int level);
+void export_trie(FILE *base, TrieNode *raiz, char str[], int nivel);
 
 int import_trie(FILE *base, TrieNode *raiz);
 

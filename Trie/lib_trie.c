@@ -38,11 +38,11 @@ void insert(TrieNode *raiz, const char *palavra, const char *origem)
     pCrawl->eh_final = 1;
 }
 
-void print_trie(TrieNode *raiz, char str[], int level)
+void print_trie(TrieNode *raiz, char str[], int nivel)
 {
     if (raiz->eh_final)
     {
-        str[level] = '\0';
+        str[nivel] = '\0';
         printf("%s ", str);
         printf("%s\n", raiz->origem);
     }
@@ -51,8 +51,8 @@ void print_trie(TrieNode *raiz, char str[], int level)
     {
         if (raiz->children[i])
         {
-            str[level] = i + 'a';
-            print_trie(raiz->children[i], str, level + 1);
+            str[nivel] = i + 'a';
+            print_trie(raiz->children[i], str, nivel + 1);
         }
     }
 }
@@ -126,11 +126,11 @@ void tudo_minusculo(char *str)
     }
 }
 
-void export_trie(FILE *base, TrieNode *raiz, char str[], int level)
+void export_trie(FILE *base, TrieNode *raiz, char str[], int nivel)
 {
     if (raiz->eh_final)
     {
-        str[level] = '\0';
+        str[nivel] = '\0';
         fprintf(base, "%s ", str);
         fprintf(base, "%s\n", raiz->origem);
     }
@@ -139,8 +139,8 @@ void export_trie(FILE *base, TrieNode *raiz, char str[], int level)
     {
         if (raiz->children[i])
         {
-            str[level] = i + 'a';
-            export_trie(base, raiz->children[i], str, level + 1);
+            str[nivel] = i + 'a';
+            export_trie(base, raiz->children[i], str, nivel + 1);
         }
     }
 }
