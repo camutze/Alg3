@@ -9,19 +9,19 @@ typedef struct trie_node
 {
     struct trie_node *children[ALPHABET_SIZE];
     char origem[TAM_ARQUIVO]; // Adiciona campo para armazenar a origem do arquivo
-    int is_end_of_word;
+    int eh_final;
 } TrieNode;
 
 
 TrieNode *get_node();
 
-void insert(TrieNode *root, const char *word, const char *origem);
+void insert(TrieNode *raiz, const char *palavra, const char *origem);
 
-void print_trie(TrieNode *root, char str[], int level);
+void print_trie(TrieNode *raiz, char str[], int level);
 
-void print_prefix(TrieNode *root, const char *prefix);
+void print_prefix(TrieNode *raiz, const char *prefix);
 
-void destroy(TrieNode *root);
+void destroy(TrieNode *raiz);
 
 int tem_acento(char *str);
 
@@ -29,8 +29,8 @@ void retira_pontuacao(char *str);
 
 void tudo_minusculo(char *str);
 
-void export_trie(FILE *base, TrieNode *root, char str[], int level);
+void export_trie(FILE *base, TrieNode *raiz, char str[], int level);
 
-void import_trie(FILE *base, TrieNode *root);
+int import_trie(FILE *base, TrieNode *raiz);
 
 #endif

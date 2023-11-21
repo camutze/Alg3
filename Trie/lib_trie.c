@@ -7,54 +7,60 @@
 
 TrieNode *get_node()
 {
-    TrieNode *node = (TrieNode *)malloc(sizeof(TrieNode));
-    node->is_end_of_word = 0;
+    TrieNode *node;
+    if(!(node = malloc(sizeof(TrieNode))))
+    {
+        printf("Erro ao alocar memoria!\n");
+        exit(1);
+    }
+
+    node->eh_final = 0;
     for (int i = 0; i < ALPHABET_SIZE; i++)
         node->children[i] = NULL;
     return node;
 }
 
-void insert(TrieNode *root, const char *word, const char *origem)
+void insert(TrieNode *raiz, const char *palavra, const char *origem)
 {
     int index;
-    TrieNode *pCrawl = root;
-    while (*word != '\0')
+    TrieNode *pCrawl = raiz;
+    while (*palavra != '\0')
     {
-        index = *word - 'a';
+        index = *palavra - 'a';
         if (pCrawl->children[index] == NULL)
         {
             pCrawl->children[index] = get_node();
             strcpy(pCrawl->children[index]->origem, origem); // Copia a origem para o novo nó
         }
         pCrawl = pCrawl->children[index];
-        word++;
+        palavra++;
     }
-    pCrawl->is_end_of_word = 1;
+    pCrawl->eh_final = 1;
 }
 
-void print_trie(TrieNode *root, char str[], int level)
+void print_trie(TrieNode *raiz, char str[], int level)
 {
-    if (root->is_end_of_word)
+    if (raiz->eh_final)
     {
         str[level] = '\0';
         printf("%s ", str);
-        printf("%s\n", root->origem);
+        printf("%s\n", raiz->origem);
     }
 
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        if (root->children[i])
+        if (raiz->children[i])
         {
             str[level] = i + 'a';
-            print_trie(root->children[i], str, level + 1);
+            print_trie(raiz->children[i], str, level + 1);
         }
     }
 }
 
-void print_prefix(TrieNode *root, const char *prefix)
+void print_prefix(TrieNode *raiz, const char *prefix)
 {
     printf("Palavras com prefixo %s:\n", prefix);
-    TrieNode *pCrawl = root;
+    TrieNode *pCrawl = raiz;
     while (*prefix != '\0')
     {
         int index = *prefix - 'a';
@@ -68,12 +74,12 @@ void print_prefix(TrieNode *root, const char *prefix)
     print_trie(pCrawl, str, 0);
 }
 
-void destroy(TrieNode *root)
+void destroy(TrieNode *raiz)
 {
     for (int i = 0; i < ALPHABET_SIZE; i++)
-        if (root->children[i] != NULL)
-            destroy(root->children[i]);
-    free(root);
+        if (raiz->children[i] != NULL)
+            destroy(raiz->children[i]);
+    free(raiz);
 }
 
 int tem_acento(char *str)
@@ -120,39 +126,40 @@ void tudo_minusculo(char *str)
     }
 }
 
-void export_trie(FILE *base, TrieNode *root, char str[], int level)
+void export_trie(FILE *base, TrieNode *raiz, char str[], int level)
 {
-    if (root->is_end_of_word)
+    if (raiz->eh_final)
     {
         str[level] = '\0';
         fprintf(base, "%s ", str);
-        fprintf(base, "%s\n", root->origem);
+        fprintf(base, "%s\n", raiz->origem);
     }
 
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        if (root->children[i])
+        if (raiz->children[i])
         {
             str[level] = i + 'a';
-            export_trie(base, root->children[i], str, level + 1);
+            export_trie(base, raiz->children[i], str, level + 1);
         }
     }
 }
 
-void import_trie(FILE *base, TrieNode *root)
+int import_trie(FILE *base, TrieNode *raiz)
 {
-    char word[TAM_PALAVRA];
+    char palavra[TAM_PALAVRA];
     char origem[TAM_ARQUIVO];
 
     // Verifica se o arquivo está vazio
     fseek(base, 0, SEEK_END);
     if (!ftell(base))
-        return;
+        return 0;
 
     rewind(base); // Volta ao início do arquivo
 
-    while (fscanf(base, "%s %s", word, origem) == 2)
+    while (fscanf(base, "%s %s", palavra, origem) == 2)
     {
-        insert(root, word, origem);
+        insert(raiz, palavra, origem);
     }
+    return 1;
 }

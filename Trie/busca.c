@@ -22,7 +22,13 @@ int main(int argc, char *argv[])
         printf("Erro ao abrir o arquivo %s\n", argv[1]);
         return 1;
     }
-    import_trie(base, root);
+
+    if(!import_trie(base, root))
+    {
+        printf("ARVORE VAZIA\n");
+        return 1;
+    }
+
     printf("Arquivo \"%s\" importado na arvore com sucesso!\n", argv[1]);
     printf("BUSCANDO...%s:\n", argv[2]);
     char str[TAM_PALAVRA];
