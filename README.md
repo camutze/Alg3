@@ -3,6 +3,7 @@
 O objetivo prático deste trabalho é a implementação de uma base de dados para localização de palavras em um conjunto de arquivos.
 Para isso, foi utilizado um arquivo tipo .txt para o banco de dados e outro .txt como arquivo no qual será realizada a busca das palavras. 
 A estrutura utilizada para a organização desses dados é a árvore Trie, voltada para arrays de caracteres (strings).
+Observação: apesar de o enunciado não exigir a diferenciação de minúsculas e maiúsculas, fizemos a diferenciação por motivos de simplificação. 
 
 Os seguintes arquivos estão contidos no trabalho: 
 
