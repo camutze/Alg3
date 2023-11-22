@@ -4,10 +4,10 @@ CFLAGS=-I.
 DEPS = lib_trie.h
 OBJ_LIB = lib_trie.o
 OBJ_INSERE = insere.o
-OBJ_BUSCA = busca.o
+OBJ_PROCURA = procura.o
 ENTREGA = backup
 
-all: insere busca
+all: insere procura
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -15,11 +15,11 @@ all: insere busca
 insere: $(OBJ_INSERE) $(OBJ_LIB)
 	$(CC) -o insere $(OBJ_INSERE) $(OBJ_LIB)
 
-busca: $(OBJ_BUSCA) $(OBJ_LIB)
-	$(CC) -o busca $(OBJ_BUSCA) $(OBJ_LIB)
+procura: $(OBJ_PROCURA) $(OBJ_LIB)
+	$(CC) -o procura $(OBJ_PROCURA) $(OBJ_LIB)
 
 clean:
-	rm -f *.o *~ insere busca
+	rm -f *.o *~ insere procura
 
 cc:
 	make clean ; reset ; make
