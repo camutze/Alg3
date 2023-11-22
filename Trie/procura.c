@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     TrieNode *root;
     FILE *base, *arquivo;
     root = get_node();
-
+    /*UM COMENTARIO, QUALQUER COISA*/
     if (argc != 3)
     {
         printf("Uso: %s <arquivo base de dados> <PREFIXO>\n", argv[0]);
@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
         printf("Erro ao abrir o arquivo %s\n", argv[1]);
         return 1;
     }
-
     if(!import_trie(base, root))
     {
         printf("ARVORE VAZIA\n");
