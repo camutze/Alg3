@@ -10,26 +10,26 @@ int main(int argc, char *argv[])
     TrieNode *root;
     FILE *base, *arquivo;
     char str[TAM_PALAVRA];
-    root = get_node();
-
+    
+    /* Verifica se os argumentos foram passados corretamente */
     if (argc != 3)
     {
         printf("Uso: %s <arquivo base de dados> <arquivo para inserção>\n", argv[0]);
         return 1;
     }
-    if (!(base = fopen(argv[1], "a")))
-    {
-        printf("Erro ao abrir o arquivo %s\n", argv[1]);
+    /* Abre a base modo leitura binaria, para importar*/
+    if (!(base = fopen(argv[1], "wb")))
         return 1;
-    }
     if (!(arquivo = fopen(argv[2], "r")))
-    {
-        printf("Erro ao abrir o arquivo %s\n", argv[2]);
         return 1;
-    }
-    import_trie(base, root);
+
+    root =  import_trie(base);
+    if(!root)
+        root = cria_nodo_trie();
+    /* Fecha a base */
     fclose(base);
 
+    /* Insere as palavras do arquivo na trie */
     while (!feof(arquivo))
     {
         char palavra[TAM_PALAVRA];
@@ -37,19 +37,16 @@ int main(int argc, char *argv[])
         retira_pontuacao(palavra);
         tudo_minusculo(palavra);
         if (!tem_acento(palavra) && strlen(palavra) >= 4)
-            insert(root, palavra, argv[2]);
+            inserir_trie(root, palavra, argv[2]);
     }
     fclose(arquivo);
 
-    if (!(base = fopen(argv[1], "w")))
-    {
-        printf("Erro ao abrir o arquivo %s\n", argv[1]);
+    /* Abre a base modo escrita binaria, para exportar*/
+    if (!(base = fopen(argv[1], "ab")))
         return 1;
-    }
-    export_trie(base, root, str, 0);
+    export_trie(base, root);
     
     fclose(base);
-    destroy(root);
-    printf("Arquivo \"%s\" inserido na arvore com sucesso!\n", argv[2]);
+    destroi(root);
     return 0;
 }
